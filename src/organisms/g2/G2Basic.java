@@ -6,14 +6,17 @@ import java.awt.Color;
 
 import organisms.*;
 
-public final class RandomPlayer implements Player {
+public final class G2Basic implements Player {
 
-	static final String _CNAME = "Random Player";
+	static final String _CNAME = "G2Basic";
 	static final Color _CColor = new Color(1.0f, 0.67f, 0.67f);
 	private int state;
 	private Random rand;
 	private OrganismsGame game;
 
+	private int offspring;
+	private int age;
+	private int lastChild;
 
 	/*
 	 * This method is called when the Organism is created.
@@ -24,6 +27,9 @@ public final class RandomPlayer implements Player {
 		rand = new Random();
 		state = rand.nextInt(256);
 		this.game = game;
+		offspring = 0;
+		age = 0;
+		lastChild = 0;
 	}
 
 	/*
@@ -65,32 +71,64 @@ public final class RandomPlayer implements Player {
 
 		//TODO this is a hack to avoid moving to a neighbor
 		
-		if(shouldReproduce(energyleft)) {
-			return reproduceTowardsFood(foodpresent, neighbors);
+		age++;
+		
+		if(shouldReproduce(energyleft, neighbors)) {
+			return reproduceTowardsFood(foodpresent, neighbors, energyleft);
 		}	
 		
-		if(foodleft > 0) {
+		if(foodleft > 0 && shouldConsume(energyleft, foodleft)) {
 			return new Move(STAYPUT);
 		}
 		
 		// redundant for staying put
-		for(int i = 0, size = foodpresent.length; i < size; i ++) {
-			if(!shouldMoveToLocation(i, foodpresent, neighbors)) continue;
-			
+		for(int i = 1, size = foodpresent.length; i < size; i ++) {
+			if(!shouldMoveToLocation(i, foodpresent, neighbors, energyleft)) continue;
+	
 			return new Move(i);
 		}
 		
-		return randomMove(false);
+		return randomMoveAwayFromNeighbors(neighbors);
+//		return randomMove(false);
 	}
 	
-	protected boolean shouldMoveToLocation(int i, boolean[] foodpresent, int[] neighbors) {
-		return foodpresent[i] && neighbors[i] == -1;  
+	protected boolean shouldMoveToLocation(int i, boolean[] foodpresent, int[] neighbors, int energyleft) {
+		return foodpresent[i] && neighbors[i] == -1 && shouldConsume(energyleft, 0);  
 	}
 	
-	protected boolean shouldReproduce(int energyleft) {
-		return energyleft > game.M() * 3/4;
+	protected boolean shouldReproduce(int energyleft, int[] neighbors){
+		if(age - lastChild > 10 && rand.nextInt(3) >=1 ){
+			return false;
+		}
+		if (rand.nextInt(3) == 2){
+			return false;
+		}
+		if(energyleft > game.M() * 1/2 && neighborCount(neighbors) < 1){
+			lastChild = age;
+			return true;
+		}
+		return false;
 	}
 	
+	protected boolean shouldConsume(int energyLeft, int foodleft){
+		if (energyLeft >  game.v() * 5){
+			return false;
+		}
+		if(foodleft < 1){
+			return false;
+		}
+		return true;
+	}
+	
+	protected int neighborCount (int[] neighbors){
+		int neighbor = 0;
+		for(int i = 1, size = neighbors.length; i < size; i++) {
+			if(neighbors[i] != -1){
+				neighbor ++;
+			}
+		}
+		return neighbor;
+	}
 	protected Move randomMoveAwayFromNeighbors(int[] neighbors) throws Exception {
 		ArrayList<Integer> directions = new ArrayList<Integer>();
 		for(int i = 1, size = neighbors.length; i < size; i++) {
@@ -98,7 +136,9 @@ public final class RandomPlayer implements Player {
 			
 			directions.add(i);
 		}
-		
+		if(directions.size() == 0){
+			return new Move(0);
+		}
 		int index = rand.nextInt(directions.size());
 		int direction = directions.get(index);
 		return new Move(direction);
@@ -126,10 +166,10 @@ public final class RandomPlayer implements Player {
 		return m;
 	}
 	
-	protected Move reproduceTowardsFood(boolean[] foodpresent, int[] neighbors) throws Exception {
+	protected Move reproduceTowardsFood(boolean[] foodpresent, int[] neighbors, int energyleft) throws Exception {
 		for(int i = 1, size = foodpresent.length; i < size; i ++) {
-			if(!shouldMoveToLocation(i, foodpresent, neighbors)) continue;
-			
+			if(!shouldMoveToLocation(i, foodpresent, neighbors, energyleft)) continue;
+			offspring ++;
 			return new Move(REPRODUCE, i, state);
 		}
 		
@@ -139,6 +179,7 @@ public final class RandomPlayer implements Player {
 	protected Move randomReproduce() throws Exception {
 		Move m = null; // placeholder for return value
 		int direction = rand.nextInt(4);
+		offspring ++;
 		// if this organism will reproduce:
 		// the second argument to the constructor is the direction to which the offspring should be born
 		// the third argument is the initial value for that organism's state variable (passed to its register function)
