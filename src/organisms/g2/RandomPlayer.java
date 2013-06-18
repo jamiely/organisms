@@ -63,7 +63,11 @@ public final class RandomPlayer implements Player {
 	 */
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft) throws Exception {
 
+		//TODO this is a hack to avoid moving to a neighbor
 		
+		if(shouldReproduce(energyleft)) {
+			return reproduceTowardsFood(foodpresent, neighbors);
+		}	
 		
 		if(foodleft > 0) {
 			return new Move(STAYPUT);
@@ -71,16 +75,20 @@ public final class RandomPlayer implements Player {
 		
 		// redundant for staying put
 		for(int i = 0, size = foodpresent.length; i < size; i ++) {
-			if(!foodpresent[i]) continue;
+			if(!shouldMoveToLocation(i, foodpresent, neighbors)) continue;
 			
 			return new Move(i);
 		}
 		
-		if(energyleft > game.M()) {
-			return randomReproduce();
-		}
-		
 		return randomMove();
+	}
+	
+	protected boolean shouldMoveToLocation(int i, boolean[] foodpresent, int[] neighbors) {
+		return foodpresent[i] && neighbors[i] == -1;  
+	}
+	
+	protected boolean shouldReproduce(int energyleft) {
+		return energyleft > game.M() * 3/4;
 	}
 	
 	protected Move randomMove() throws Exception {
@@ -96,6 +104,16 @@ public final class RandomPlayer implements Player {
 		case 5:	return randomReproduce();
 		}
 		return m;
+	}
+	
+	protected Move reproduceTowardsFood(boolean[] foodpresent, int[] neighbors) throws Exception {
+		for(int i = 1, size = foodpresent.length; i < size; i ++) {
+			if(!shouldMoveToLocation(i, foodpresent, neighbors)) continue;
+			
+			return new Move(REPRODUCE, i, state);
+		}
+		
+		return randomReproduce();
 	}
 
 	protected Move randomReproduce() throws Exception {
