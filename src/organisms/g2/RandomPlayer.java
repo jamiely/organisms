@@ -63,27 +63,51 @@ public final class RandomPlayer implements Player {
 	 */
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft) throws Exception {
 
+		
+		
+		if(foodleft > 0) {
+			return new Move(STAYPUT);
+		}
+		
+		// redundant for staying put
+		for(int i = 0, size = foodpresent.length; i < size; i ++) {
+			if(!foodpresent[i]) continue;
+			
+			return new Move(i);
+		}
+		
+		if(energyleft > game.M()) {
+			return randomReproduce();
+		}
+		
+		return randomMove();
+	}
+	
+	protected Move randomMove() throws Exception {
 		Move m = null; // placeholder for return value
-		
-		// this player selects randomly
 		int direction = rand.nextInt(6);
-		
+		// this player selects randomly
 		switch (direction) {
 		case 0: m = new Move(STAYPUT); break;
 		case 1: m = new Move(WEST); break;
 		case 2: m = new Move(EAST); break;
 		case 3: m = new Move(NORTH); break;
 		case 4: m = new Move(SOUTH); break;
-		case 5:	direction = rand.nextInt(4);
-				// if this organism will reproduce:
-				// the second argument to the constructor is the direction to which the offspring should be born
-				// the third argument is the initial value for that organism's state variable (passed to its register function)
-				if (direction == 0) m = new Move(REPRODUCE, WEST, state);
-				else if (direction == 1) m = new Move(REPRODUCE, EAST, state);
-				else if (direction == 2) m = new Move(REPRODUCE, NORTH, state);
-				else m = new Move(REPRODUCE, SOUTH, state);
+		case 5:	return randomReproduce();
 		}
 		return m;
 	}
 
+	protected Move randomReproduce() throws Exception {
+		Move m = null; // placeholder for return value
+		int direction = rand.nextInt(4);
+		// if this organism will reproduce:
+		// the second argument to the constructor is the direction to which the offspring should be born
+		// the third argument is the initial value for that organism's state variable (passed to its register function)
+		if (direction == 0) m = new Move(REPRODUCE, WEST, state);
+		else if (direction == 1) m = new Move(REPRODUCE, EAST, state);
+		else if (direction == 2) m = new Move(REPRODUCE, NORTH, state);
+		else m = new Move(REPRODUCE, SOUTH, state);
+		return m;
+	}
 }
