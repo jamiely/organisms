@@ -80,7 +80,7 @@ public final class RandomPlayer implements Player {
 			return new Move(i);
 		}
 		
-		return randomMove();
+		return randomMove(false);
 	}
 	
 	protected boolean shouldMoveToLocation(int i, boolean[] foodpresent, int[] neighbors) {
@@ -91,9 +91,29 @@ public final class RandomPlayer implements Player {
 		return energyleft > game.M() * 3/4;
 	}
 	
-	protected Move randomMove() throws Exception {
+	protected Move randomMoveAwayFromNeighbors(int[] neighbors) throws Exception {
+		ArrayList<Integer> directions = new ArrayList<Integer>();
+		for(int i = 1, size = neighbors.length; i < size; i++) {
+			if(neighbors[i] != -1) continue; 
+			
+			directions.add(i);
+		}
+		
+		int index = rand.nextInt(directions.size());
+		int direction = directions.get(index);
+		return new Move(direction);
+	}
+	
+	protected Move randomMove(boolean mayStayPut) throws Exception {
 		Move m = null; // placeholder for return value
-		int direction = rand.nextInt(6);
+		int direction = rand.nextInt(5);
+		
+		if(!mayStayPut) {
+			direction = rand.nextInt(4) + 1;
+		}
+		
+		//if(!mayStayPut && direction == STAYPUT) return randomMove(mayStayPut);
+		
 		// this player selects randomly
 		switch (direction) {
 		case 0: m = new Move(STAYPUT); break;
@@ -101,7 +121,7 @@ public final class RandomPlayer implements Player {
 		case 2: m = new Move(EAST); break;
 		case 3: m = new Move(NORTH); break;
 		case 4: m = new Move(SOUTH); break;
-		case 5:	return randomReproduce();
+		//case 5:	return randomReproduce();
 		}
 		return m;
 	}
