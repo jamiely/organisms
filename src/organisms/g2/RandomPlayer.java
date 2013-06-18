@@ -1,4 +1,4 @@
-package organisms.g4;
+package organisms.g2;
 
 import java.util.*;
 import java.io.*;
