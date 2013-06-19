@@ -547,7 +547,7 @@ public final class OrganismsGame implements Constants, IFCModel {
         for (int i=0; i < _numplayers; i++) {
             println("\t[Player" + i + "]: " + OrigPlayers[i].name());
         }
-        refresh();
+        refreshGame();
     }
 
     public String name() throws Exception {
@@ -575,7 +575,7 @@ public final class OrganismsGame implements Constants, IFCModel {
     }
     
     
-    private void refresh() throws Exception {
+    private void refreshGame() throws Exception {
         if (_registered) {
             _ui.refresh();
         }
@@ -587,67 +587,12 @@ public final class OrganismsGame implements Constants, IFCModel {
     //********************************************
 
 
-    private void reset() throws Exception {
+    private void resetGame() throws Exception {
         if (_registered) {
             _ui.reset();
         }
     }
 
-	    /*
-    Move parseMove(String __str) throws Exception
-    {
-        try{
-            if (__str == null) {
-                return null;
-            }
-
-            StringTokenizer st = new StringTokenizer(__str, " \t\n;");
-            int count = 0;
-	    char movetype;
-	    int[] Cards;
-	    int interrogatee = -1;
-
-	    if(st.hasMoreElements())
-	    {
-		    movetype = Character.toUpperCase(st.nextToken().charAt(0));
-		    if(movetype == 'G')
-		    {
-			    int morecards = st.countTokens();
-			    if(morecards <= 0)
-				    return null;
-			    Cards = new int[morecards];
-		    }
-		    else if(movetype == 'I')
-		    {
-			    int morecards = st.countTokens() - 1;
-			    if(morecards <= 0)
-				    return null;
-			    Cards = new int[morecards];
-			    interrogatee = (new Integer(st.nextToken())).intValue();
-		    }
-		    else return null;
-	    }
-	    else return null;
-
-            while (st.hasMoreElements())
-	    {
-                Cards[count] = (new Integer(st.nextToken())).intValue();
-                count++;
-            }
-	   if(movetype == 'G')
-	   {
-		   return new Move(_CGUESS, Cards);
-	   }
-	   else
-	   {
-		   return new Move(_CINTERROGATION, Cards, interrogatee);
-	   }
-        } catch (Exception EXC) {
-            println("Error:  "+EXC.getMessage());
-            return null;
-        }
-    }
-	*/
 
     boolean WithProb(double p)
     {
@@ -1470,23 +1415,23 @@ void printBoard()
             	if (source == _100steps) {
             		
                     for (int i = 0; i < 100; i++) step();
-                    this.refresh();
-                    OrganismsGame.this.refresh();
+                    this.refreshControlPanel();
+                    OrganismsGame.this.refreshGame();
                     return;
             	}
             	
                 if (source == _step) {
                     step();
-                    this.refresh();
-                    OrganismsGame.this.refresh();
+                    this.refreshControlPanel();
+                    OrganismsGame.this.refreshGame();
                     return;
                 }
                 if (source == _play) {
-		    new StopListener(this).start();
+                	new StopListener(this).start();
                     return;
                 }
                 if (source == _reset) {
-                    reset();
+                    OrganismsGame.this.resetGame();
                     return;
                 }
 		if (source == _stop) {
@@ -1641,7 +1586,7 @@ void printBoard()
                         }
                         _ui.configure(_config);
                         repaint();
-                        OrganismsGame.this.refresh();
+                        OrganismsGame.this.refreshGame();
                     } else {
                         println("Invalid Input");
                     }
@@ -1679,7 +1624,7 @@ void printBoard()
         //* Score Updater
         //*
         //********************************************
-        public void refresh() throws Exception {
+        public void refreshControlPanel() throws Exception {
             int _MAX = numPlayers();
 
             for (int i=0; i < _MAX; i++) {
@@ -1689,7 +1634,9 @@ void printBoard()
                 //_scores[i].setText(_players[i].result());
             }
             _currRoundfield.setText(Integer.toString(currRound()));
-        }                            
+            
+            this.repaint();
+        }
 
         
         //********************************************
@@ -1713,10 +1660,103 @@ void printBoard()
 
     class StopListener extends Thread
     {
+    	private static final int trials = 10;
+    	private int gameIndex = 1;
 	private ControlPanel controlPanel;	
+	private ArrayList<Round> lastRounds;
 	public StopListener(ControlPanel cp) { 
 	    controlPanel=cp;
+	    lastRounds = new ArrayList<Round>();
 	} 
+	private void printInfo(int gameIndex, int trials) {
+		int _MAX = numPlayers();
+
+		PlayerRoundData[] data = getLastRound().players;
+		// output the results
+        for (int i=0; i < _MAX; i++) {
+		    int pop = data[i].count;
+		    int totalE = data[i].energy;
+		    String message = String.format("GAME (%d/%d) Player: %d Population: %d Energy: %d", gameIndex, trials, i, pop, totalE);
+            try { getGame().println(message); } catch(Exception e) {}
+        }
+    }
+	private void trackLastRound() {
+		lastRounds.add(getLastRound());
+	}
+	private Round getLastRound() {
+		return (Round) getGame().roundList.lastElement();
+	}
+	private OrganismsGame getGame() {
+		return GUI._amoeba;
+	}
+	private void showSummary() {
+		int _MAX = numPlayers();
+		
+		PlayerRoundData[] cumulativeData = new PlayerRoundData[_MAX];
+		for(Round round: lastRounds) {
+			PlayerRoundData[] data = round.players;
+			// output the results
+	        for (int i=0; i < _MAX; i++) {
+			    int pop = data[i].count;
+			    int totalE = data[i].energy;
+			    
+			    if(cumulativeData[i] == null) {
+			    	cumulativeData[i] = new PlayerRoundData(data[i].playerId, 0, 0);
+			    }
+			    
+			    cumulativeData[i].count += data[i].count;
+			    cumulativeData[i].energy += data[i].energy;
+	        }
+		}
+		// mean
+		for(int i = 0, size = lastRounds.size(); i < _MAX; i++) {
+			cumulativeData[i].count = cumulativeData[i].count / size;
+			cumulativeData[i].energy = cumulativeData[i].energy / size;
+		}
+		
+		println(String.format("[SUMMARY of %d trials]", trials));
+		for(PlayerRoundData data: cumulativeData) {
+			println(String.format("Player: %d Mean Count: %d Mean Energy: %d", data.playerId, data.count, data.energy));
+		}
+	}
+	protected void println(String message) {
+		try { getGame().println(message); } catch(Exception ex) {}
+	}
+	
+	public void run ()
+	{
+		try
+		{
+		    while (getGame().step()) {
+		    	getGame().refreshGame();
+		    	controlPanel.refreshControlPanel();
+		    }
+			getGame().refreshGame();
+			controlPanel.refreshControlPanel();
+			
+			printInfo(gameIndex, trials);
+			trackLastRound();
+			gameIndex++;
+			
+			if(gameIndex > trials) {
+				showSummary();
+				return;
+			}
+			
+			Thread.sleep(100);
+			
+			GUI._amoeba.resetGame();
+			controlPanel.refreshControlPanel();
+			run();
+		}
+		catch (Exception e)
+		{
+		    System.out.println("unexpected exception caught in run");
+	                e.printStackTrace();
+		}
+	}
+    }
+    
 	public void run ()
 	{
 		try
