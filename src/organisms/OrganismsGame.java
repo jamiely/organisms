@@ -1667,6 +1667,30 @@ void printBoard()
             return ret;
         }
     }
+    class StopListener extends Thread
+    {
+	private ControlPanel controlPanel;	
+	public StopListener(ControlPanel cp) { 
+	    controlPanel=cp;
+	} 
+	public void run ()
+	{
+		try
+		{
+		    while (GUI._amoeba.step()) {
+			GUI._amoeba.refreshGame();
+			controlPanel.refreshControlPanel();
+		    }		
+			GUI._amoeba.refreshGame();
+			controlPanel.refreshControlPanel();
+		}
+		catch (Exception e)
+		{
+		    System.out.println("unexpected exception caught in run");
+	                e.printStackTrace();
+		}
+	}
+    }
 
     class StopListener2 extends Thread
     {
