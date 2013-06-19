@@ -1141,7 +1141,8 @@ void printBoard()
         JButton      _play;
         JButton      _step;
         JButton		 _100steps;
-        JButton      _reset;        
+        JButton      _reset;
+        JButton      _playTrials;
 	JButton      _stop;
 	JButton      _graph;
 
@@ -1191,6 +1192,10 @@ void printBoard()
             //_reset = new JButton(_CRESET_ICON);
             _reset = new JButton("Reset");
             _reset.addActionListener(this);
+            
+            _playTrials = new JButton("Play Trials");
+            _playTrials.addActionListener(this);
+            
             //_step = new JButton(_CSTEP_ICON);
             _step = new JButton("Step");
             _step.addActionListener(this);
@@ -1430,6 +1435,10 @@ void printBoard()
                 	new StopListener(this).start();
                     return;
                 }
+                if (source == _playTrials) {
+                	new StopListener2(this).start();
+                    return;
+                }
                 if (source == _reset) {
                     OrganismsGame.this.resetGame();
                     return;
@@ -1647,27 +1656,28 @@ void printBoard()
         public JButton[] exportTools() {
 	    /* amg2006 changed to 4 */
 	    // djv changed to 5
-            JButton[] ret = new JButton[6];
+            JButton[] ret = new JButton[7];
             ret[0] = _reset;
             ret[1] = _step;
             ret[2] = _100steps;
             ret[3] = _play;
-	    ret[4] = _stop;
-	    ret[5] = _graph;
+		    ret[4] = _stop;
+		    ret[5] = _graph;
+		    ret[6] = _playTrials;
             return ret;
         }
     }
 
-    class StopListener extends Thread
+    class StopListener2 extends Thread
     {
     	private static final int trials = 10;
     	private int gameIndex = 1;
 	private ControlPanel controlPanel;	
 	private ArrayList<Round> lastRounds;
-	public StopListener(ControlPanel cp) { 
+	public StopListener2(ControlPanel cp) { 
 	    controlPanel=cp;
 	    lastRounds = new ArrayList<Round>();
-	} 
+	}
 	private void printInfo(int gameIndex, int trials) {
 		int _MAX = numPlayers();
 
@@ -1754,26 +1764,9 @@ void printBoard()
 		    System.out.println("unexpected exception caught in run");
 	                e.printStackTrace();
 		}
-	}
+	
     }
     
-	public void run ()
-	{
-		try
-		{
-		    while (GUI._amoeba.step()) {
-			GUI._amoeba.refresh();
-			controlPanel.refresh();
-		    }		
-			GUI._amoeba.refresh();
-			controlPanel.refresh();
-		}
-		catch (Exception e)
-		{
-		    System.out.println("unexpected exception caught in run");
-	                e.printStackTrace();
-		}
-	}
     }
 
 } // end - class Organisms2
