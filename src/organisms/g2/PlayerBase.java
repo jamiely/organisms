@@ -11,7 +11,6 @@ import organisms.g2.data.MoveInput;
 public abstract class PlayerBase implements Player {
 	private static final long serialVersionUID = -2855747689179359665L;
 
-	private static Color DEFAULT_COLOR = new Color(0.3f, 0.6f, 0.4f);
 	private Random rand;
 	private int state;
 	private OrganismsGame game;
@@ -30,7 +29,7 @@ public abstract class PlayerBase implements Player {
 		setOffspringCount(0);
 		setAge(0);
 		setAgeAtWhichWeHadLastChild(0);
-		setColor(DEFAULT_COLOR);
+		setColor(Color.GREEN);
 		setMoveFactory(new MoveFactory());
 		setRand(new Random());
 	}

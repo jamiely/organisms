@@ -1,7 +1,5 @@
 package organisms.g2;
 
-import java.util.*;
-import java.io.*;
 import java.awt.Color;
 
 import organisms.*;
@@ -11,8 +9,6 @@ import organisms.g2.stats.Stats;
 public final class G2Basic extends PlayerBase {
 	private static final long serialVersionUID = -3612443241236355755L;
 	
-	private static Color DEFAULT_COLOR = new Color(1.0f, 0.67f, 0.67f);
-	
 	/*
 	 * This method is called when the Organism is created.
 	 * The key is the value that is passed to this organism by its parent (not used here)
@@ -21,7 +17,7 @@ public final class G2Basic extends PlayerBase {
 	{
 		super.register(game, key);
 		setName("G2Basic");
-		setColor(DEFAULT_COLOR);
+		setColor(Color.PINK);
 	}
 
 	/*
