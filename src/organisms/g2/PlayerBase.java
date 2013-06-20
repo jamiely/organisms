@@ -50,9 +50,13 @@ public abstract class PlayerBase implements Player {
 	@Override
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft)
 			throws Exception {
-		setAge(getAge() + 1);
+		memory.rememberNeighbors(neighbors);
+		memory.rememberFood(foodpresent);
+		memory.setAge(memory.getAge() + 1);
+		
 		Move move = move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
 		memory.updateLocation(move);
+		
 		return move;
 	}
 	

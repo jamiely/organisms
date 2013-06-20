@@ -4,26 +4,41 @@
 package organisms.g2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import organisms.Move;
+import organisms.Constants;
 
 /**
  * @author Anne
  *
  */
-public class Memory {
+public class Memory implements Constants {
 	private int[] location;
 	private ArrayList<int[]> foodLocations;
 	
-	int age;
+	private int age;
 	private Integer ageAtWhichWeHadLastChild;
 	private Integer offspringCount;
 	
+	private HashMap<Integer, Integer> neighbors;
+	private LinkedList<Integer> moves;
 
 	public void Memory(){
 		location = new int[] {0,0};
-		ArrayList<int[]> foodLocations = new ArrayList<int[]> ();
+		foodLocations = new ArrayList<int[]> ();
+		
 		age = 0;
+		ageAtWhichWeHadLastChild = 0;
+		offspringCount = 0;
+		
+		neighbors = new HashMap<Integer, Integer>();
+		
+		moves = new LinkedList<Integer>();
+		
+		
+		
 	}
 	
 	public void increaseAge(){
@@ -36,32 +51,124 @@ public class Memory {
 	}
 	
 	public void updateLocation(Move move) {
+		moves.add(move.type());
 		switch(move.type())
 	    {
-//		    case STAYPUT:
-//			    return;
-//		    case WEST:
-//		    	location[1] -=1;
-//			    return;
-//		    case EAST:
-//		    	location[1] +=1;
-//		    	return;
-//		    case NORTH:
-//		    	location[0] -=1;
-//		    	return;
-//		    case SOUTH:
-//		    	location[0] +=1;
-//		    	return;
+		    case STAYPUT:
+			    return;
+		    case WEST:
+		    	location[1] -=1;
+			    return;
+		    case EAST:
+		    	location[1] +=1;
+		    	return;
+		    case NORTH:
+		    	location[0] -=1;
+		    	return;
+		    case SOUTH:
+		    	location[0] +=1;
+		    	return;
 	    }
 	    return;
+	}
+	
+	public void rememberFood(boolean[] foodpresent){
+		for(int i = 1, size = foodpresent.length; i < size; i++) {
+			if(foodpresent[i]){
+				addFood(i);
+			}
+		}
+	}
+	
+	public void addFood(int i){
+		int[] foodLocation = location;
+		switch(i)
+		 {
+		    case STAYPUT:
+		    	if (!foodLocations.contains(foodLocation)){
+		    		foodLocations.add(foodLocation);
+		    	}
+			    return;
+		    case WEST:
+		    	foodLocation[1] -=1;
+		    	if (!foodLocations.contains(foodLocation)){
+		    		foodLocations.add(foodLocation);
+		    	}
+			    return;
+		    case EAST:
+		    	foodLocation[1] +=1;
+		    	if (!foodLocations.contains(foodLocation)){
+		    		foodLocations.add(foodLocation);
+		    	}
+		    	return;
+		    case NORTH:
+		    	foodLocation[0] -=1;
+		    	if (!foodLocations.contains(foodLocation)){
+		    		foodLocations.add(foodLocation);
+		    	}
+		    	return;
+		    case SOUTH:
+		    	foodLocation[0] +=1;
+		    	if (!foodLocations.contains(foodLocation)){
+		    		foodLocations.add(foodLocation);
+		    	}
+		    	return;
+	    }
+	}
+	
+	
+	public void addNeighbor(int i){
+		switch(i)
+		 {
+		    case WEST:
+		    	neighbors.put(WEST, neighbors.get(WEST)+1);
+			    return;
+		    case EAST:
+		    	neighbors.put(EAST, neighbors.get(EAST)+1);
+			    return;
+		    case NORTH:
+		    	neighbors.put(NORTH, neighbors.get(NORTH)+1);
+			    return;
+		    case SOUTH:
+		    	neighbors.put(SOUTH, neighbors.get(SOUTH)+1);
+			    return;
+	    }
+	}
+	
+	public void rememberNeighbors(int[] neighbors){
+		for(int i = 1, size = neighbors.length; i < size; i++) {
+			if(neighbors[i] != -1){
+				addNeighbor(i);
+			}
+		}
+	}
+	
+	public int getNeighborCount(Move move){
+		switch(move.type())
+		 {
+		    case WEST:
+		    	return neighbors.get(WEST);
+		    case EAST:
+		    	return neighbors.get(EAST);
+		    case NORTH:
+		    	return neighbors.get(NORTH);
+		    case SOUTH:
+		    	return neighbors.get(SOUTH);
+	    }
+		return 0;
+	}
+	
+	public Move getClosetFood(){
+		//TODO
+		return null;
 	}
 
 	/**
 	 * @param age2
 	 * @return
 	 */
-	public Object setAge(Integer age2) {
-		// TODO Auto-generated method stub
+	public Object setAge(int age) {
+		this.age = age;
 		return null;
 	}
 
@@ -69,15 +176,14 @@ public class Memory {
 	 * @return
 	 */
 	public Integer getOffspringCount() {
-		// TODO Auto-generated method stub
-		return null;
+		return offspringCount;
 	}
 
 	/**
 	 * @param offspringCount2
 	 */
-	public void setOffspringCount(Integer offspringCount2) {
-		// TODO Auto-generated method stub
+	public void setOffspringCount(Integer offspringCount) {
+		this.offspringCount = offspringCount;
 		
 	}
 
@@ -85,18 +191,14 @@ public class Memory {
 	 * @return
 	 */
 	public Integer getAgeAtWhichWeHadLastChild() {
-		// TODO Auto-generated method stub
-		return null;
+		return ageAtWhichWeHadLastChild;
 	}
 
 	/**
 	 * @param ageAtWhichWeHadLastChild2
 	 */
-	public void setAgeAtWhichWeHadLastChild(Integer ageAtWhichWeHadLastChild2) {
-		// TODO Auto-generated method stub
-		
+	public void setAgeAtWhichWeHadLastChild(Integer ageAtWhichWeHadLastChild) {
+		this.ageAtWhichWeHadLastChild = ageAtWhichWeHadLastChild;
 	}
-
-	
 
 }
