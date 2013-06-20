@@ -1,6 +1,7 @@
 package organisms.g2;
 
 import java.awt.Color;
+import java.util.Random;
 
 import organisms.Move;
 import organisms.OrganismsGame;
@@ -11,7 +12,7 @@ public abstract class PlayerBase implements Player {
 	private static final long serialVersionUID = -2855747689179359665L;
 
 	private static Color DEFAULT_COLOR = new Color(0.3f, 0.6f, 0.4f);
-	
+	private Random rand;
 	private int state;
 	private OrganismsGame game;
 	private Color color;
@@ -20,6 +21,7 @@ public abstract class PlayerBase implements Player {
 	private Integer age;
 	private Integer ageAtWhichWeHadLastChild;
 	private String name;
+	private MoveFactory moveFactory;
 	
 	@Override
 	public void register(OrganismsGame __amoeba, int key) throws Exception {
@@ -29,6 +31,8 @@ public abstract class PlayerBase implements Player {
 		setAge(0);
 		setAgeAtWhichWeHadLastChild(0);
 		setColor(DEFAULT_COLOR);
+		setMoveFactory(new MoveFactory());
+		setRand(new Random());
 	}
 
 	@Override
@@ -116,4 +120,32 @@ public abstract class PlayerBase implements Player {
 		this.color = color;
 	}
 
+	public MoveFactory getMoveFactory() {
+		return moveFactory;
+	}
+
+	public void setMoveFactory(MoveFactory moveFactory) {
+		this.moveFactory = moveFactory;
+	}
+
+	protected Random getRand() {
+		return rand;
+	}
+
+	protected void setRand(Random rand) {
+		this.rand = rand;
+	}
+
+	protected Move randomReproduce() {
+		return createReproductionMove(PlayerUtil.getRandomCardinalDirection(getRand()));
+	}
+	
+	public Move createReproductionMove(int direction) {
+		return createReproductionMove(direction, getState());
+	}
+
+	public Move createReproductionMove(int direction, Integer state) {
+		setOffspringCount(getOffspringCount() + 1);
+		return new Move(REPRODUCE, direction, state);
+	}
 }
