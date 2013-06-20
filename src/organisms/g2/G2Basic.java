@@ -6,6 +6,7 @@ import organisms.*;
 import organisms.g2.behaviors.BehaviorCoordinator;
 import organisms.g2.behaviors.ExploreBehavior;
 import organisms.g2.behaviors.HungryBehavior;
+import organisms.g2.behaviors.RandomBehavior;
 import organisms.g2.behaviors.ReproductionBehavior;
 import organisms.g2.data.MoveInput;
 import organisms.g2.stats.Stats;
@@ -113,6 +114,7 @@ public final class G2Basic extends PlayerBase {
 		coordinator.addBehavior(new HungryBehavior());
 		coordinator.addBehavior(new ReproductionBehavior());
 		coordinator.addBehavior(new ExploreBehavior());
+		coordinator.addBehavior(new RandomBehavior());
 		return coordinator;
 	}
 }

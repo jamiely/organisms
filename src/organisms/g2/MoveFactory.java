@@ -29,6 +29,9 @@ public class MoveFactory implements Constants {
 	public Move randomMoveWithoutStayingPut() {
 		return randomMove(false);
 	}
+	public Move randomMove() {
+		return randomMove(true);
+	}
 	public Move randomMove(boolean mayStayPut) {
 		Move m = null; // placeholder for return value
 		int direction = rand.nextInt(5);
