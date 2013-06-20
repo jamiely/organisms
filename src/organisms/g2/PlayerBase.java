@@ -142,7 +142,7 @@ public abstract class PlayerBase implements Player {
 	}
 	
 	protected Move createStayPutMove() {
-		return new Move(STAYPUT);
+		return moveFactory.stayPutMove();
 	}
 	
 	protected Move createMove(int direction) {

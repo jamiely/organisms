@@ -10,11 +10,13 @@ public class HungryBehavior extends BehaviorBase {
 	}
 	@Override
 	public Move move(MoveInput input) {
+		if(!iAmHungry()) return null;
+		
 		// TODO implement me! Return null if we don't want to use any move
 		return null;
 	}
 	
-	protected Boolean amIHungry() {
+	protected Boolean iAmHungry() {
 		return false;
 	}
 }

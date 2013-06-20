@@ -14,6 +14,6 @@ public class RandomBehavior extends BehaviorBase {
 	@Override
 	public Move move(MoveInput input) {
 		// TODO actually implement a random move
-		return moveFactory.randomMove();
+		return moveFactory.randomMoveIncludingReproduce();
 	}
 }

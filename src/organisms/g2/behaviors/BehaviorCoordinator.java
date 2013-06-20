@@ -9,6 +9,10 @@ import organisms.g2.data.MoveInput;
 public class BehaviorCoordinator implements MoveProvider {
 	private ArrayList<BehaviorBase> behaviors;
 
+	public BehaviorCoordinator(){
+		setBehaviors(new ArrayList<BehaviorBase>());
+	}
+	
 	public BehaviorBase addBehavior(BehaviorBase behavior) {
 		getBehaviors().add(behavior);
 		return behavior;

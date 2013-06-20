@@ -12,6 +12,9 @@ public class MoveFactory implements Constants {
 	public MoveFactory() {
 		rand = new Random();
 	}
+	public Move stayPutMove() {
+		return new Move(STAYPUT);
+	}
 	public Move randomMoveAwayFromNeighbors(MoveInput input) {
 		ArrayList<Integer> directions = new ArrayList<Integer>();
 		for(int i = 1, size = input.getNeighbors().length; i < size; i++) {
@@ -31,6 +34,16 @@ public class MoveFactory implements Constants {
 	}
 	public Move randomMove() {
 		return randomMove(true);
+	}
+	public Move randomReproduce() {
+		return randomReproduce(rand);
+	}
+	public Move randomReproduce(Random rand) {
+		return new Move(REPRODUCE, PlayerUtil.getRandomCardinalDirection(rand), 0);
+	}
+	public Move randomMoveIncludingReproduce() {
+		if(rand.nextInt(6) == 5) return randomReproduce();
+		return randomMove();
 	}
 	public Move randomMove(boolean mayStayPut) {
 		Move m = null; // placeholder for return value
