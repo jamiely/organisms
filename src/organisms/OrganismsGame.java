@@ -1436,7 +1436,14 @@ void printBoard()
                     return;
                 }
                 if (source == _playTrials) {
-                	new StopListener2(this).start();
+                	String strTrials = (String) JOptionPane.showInputDialog("Enter the number of trials");
+                	int trials;
+                	try {
+                		trials = Integer.parseInt(strTrials);
+                	} catch(NumberFormatException ex) {
+                		trials = 10;
+                	}
+                	new StopListener2(this, trials).start();
                     return;
                 }
                 if (source == _reset) {
@@ -1694,13 +1701,17 @@ void printBoard()
 
     class StopListener2 extends Thread
     {
-    	private static final int trials = 10;
+    	private int trials = 10;
     	private int gameIndex = 1;
 	private ControlPanel controlPanel;	
 	private ArrayList<Round> lastRounds;
-	public StopListener2(ControlPanel cp) { 
+	public StopListener2(ControlPanel cp) {
+		this(cp, 10);
+	}
+	public StopListener2(ControlPanel cp, int trials) { 
 	    controlPanel=cp;
 	    lastRounds = new ArrayList<Round>();
+	    this.trials = trials;
 	}
 	private void printInfo(int gameIndex, int trials) {
 		int _MAX = numPlayers();
