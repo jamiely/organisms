@@ -5,6 +5,7 @@ import java.io.*;
 import java.awt.Color;
 
 import organisms.*;
+import organisms.g2.data.MoveInput;
 
 public final class G2Basic implements Player {
 
@@ -67,43 +68,48 @@ public final class G2Basic implements Player {
 	 * foodleft is how much food is left on the current square
 	 * energyleft is this organism's remaining energy
 	 */
-	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft) throws Exception {
+	public Move move(MoveInput input) {
 
 		//TODO this is a hack to avoid moving to a neighbor
 		
 		age++;
 		
-		if(shouldReproduce(energyleft, neighbors)) {
-			return reproduceTowardsFood(foodpresent, neighbors, energyleft);
+		if(shouldReproduce(input)) {
+			return reproduceTowardsFood(input);
 		}	
 		
-		if(foodleft > 0 && shouldConsume(energyleft, foodleft)) {
+		if(input.getFoodLeft() > 0 && shouldConsume(input.getEnergyLeft(), input.getFoodLeft())) {
 			return new Move(STAYPUT);
 		}
 		
 		// redundant for staying put
-		for(int i = 1, size = foodpresent.length; i < size; i ++) {
-			if(!shouldMoveToLocation(i, foodpresent, neighbors, energyleft)) continue;
+		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
+			if(!shouldMoveToLocation(i, input)) continue;
 	
 			return new Move(i);
 		}
 		
-		return randomMoveAwayFromNeighbors(neighbors);
+		return randomMoveAwayFromNeighbors(input);
 //		return randomMove(false);
 	}
 	
-	protected boolean shouldMoveToLocation(int i, boolean[] foodpresent, int[] neighbors, int energyleft) {
-		return foodpresent[i] && neighbors[i] == -1 && shouldConsume(energyleft, 0);  
+	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft) {
+		MoveInput input = MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft);
+		return move(input);
 	}
 	
-	protected boolean shouldReproduce(int energyleft, int[] neighbors){
+	protected boolean shouldMoveToLocation(int i, MoveInput input) {
+		return input.getFoodPresent()[i] && input.getNeighbors()[i] == -1 && shouldConsume(input.getEnergyLeft(), 0);  
+	}
+	
+	protected boolean shouldReproduce(MoveInput input){
 		if(age - lastChild > 10 && rand.nextInt(3) >=1 ){
 			return false;
 		}
 		if (rand.nextInt(3) == 2){
 			return false;
 		}
-		if(energyleft > game.M() * 1/2 && neighborCount(neighbors) < 1){
+		if(input.getEnergyLeft() > game.M() * 1/2 && neighborCount(input.getNeighbors()) < 1){
 			lastChild = age;
 			return true;
 		}
@@ -120,7 +126,7 @@ public final class G2Basic implements Player {
 		return true;
 	}
 	
-	protected int neighborCount (int[] neighbors){
+	protected int neighborCount (Integer[] neighbors){
 		int neighbor = 0;
 		for(int i = 1, size = neighbors.length; i < size; i++) {
 			if(neighbors[i] != -1){
@@ -129,10 +135,10 @@ public final class G2Basic implements Player {
 		}
 		return neighbor;
 	}
-	protected Move randomMoveAwayFromNeighbors(int[] neighbors) throws Exception {
+	protected Move randomMoveAwayFromNeighbors(MoveInput input) {
 		ArrayList<Integer> directions = new ArrayList<Integer>();
-		for(int i = 1, size = neighbors.length; i < size; i++) {
-			if(neighbors[i] != -1) continue; 
+		for(int i = 1, size = input.getNeighbors().length; i < size; i++) {
+			if(input.getNeighbors()[i] != -1) continue; 
 			
 			directions.add(i);
 		}
@@ -166,9 +172,9 @@ public final class G2Basic implements Player {
 		return m;
 	}
 	
-	protected Move reproduceTowardsFood(boolean[] foodpresent, int[] neighbors, int energyleft) throws Exception {
-		for(int i = 1, size = foodpresent.length; i < size; i ++) {
-			if(!shouldMoveToLocation(i, foodpresent, neighbors, energyleft)) continue;
+	protected Move reproduceTowardsFood(MoveInput input) {
+		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
+			if(!shouldMoveToLocation(i, input)) continue;
 			offspring ++;
 			return new Move(REPRODUCE, i, state);
 		}
@@ -176,7 +182,7 @@ public final class G2Basic implements Player {
 		return randomReproduce();
 	}
 
-	protected Move randomReproduce() throws Exception {
+	protected Move randomReproduce() {
 		Move m = null; // placeholder for return value
 		int direction = rand.nextInt(4);
 		offspring ++;
