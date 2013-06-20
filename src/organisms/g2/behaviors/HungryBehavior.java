@@ -10,13 +10,36 @@ public class HungryBehavior extends BehaviorBase {
 	}
 	@Override
 	public Move move(MoveInput input) {
-		if(!iAmHungry()) return null;
+		if(!iAmHungry(input)) return null;
 		
-		// TODO implement me! Return null if we don't want to use any move
+		if(input.getFoodLeft() > 0 && shouldConsume(input)) {
+			return getMoveFactory().stayPutMove();
+		}
+		
+		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
+			if(!shouldMoveToLocation(i, input)) continue;
+	
+			return new Move(i);
+		}
+		
 		return null;
 	}
 	
-	protected Boolean iAmHungry() {
-		return false;
+	protected Boolean iAmHungry(MoveInput input) {
+		return !hasAlotOfEnergy(input);
+	}
+	
+	protected boolean hasAlotOfEnergy(MoveInput input) {
+		return input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
+	}
+	
+	protected boolean shouldConsume(MoveInput input){
+		if(input.getFoodLeft() < 1){
+			return false;
+		}
+		return true;
+	}
+	protected boolean shouldMoveToLocation(int i, MoveInput input) {
+		return input.isFoodPresentAt(i) && !input.isNeighborAt(i) && shouldConsume(input);
 	}
 }

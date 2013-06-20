@@ -27,9 +27,9 @@ public abstract class PlayerBase implements Player {
 		setState(0);
 		setGame(__amoeba);
 		setColor(Color.GREEN);
-		setMoveFactory(new MoveFactory());
-		memory = new Memory();
-		
+		setRand(new Random());
+		setMoveFactory(new MoveFactory(rand));
+		memory = new Memory();	
 	}
 
 	@Override
@@ -172,27 +172,27 @@ public abstract class PlayerBase implements Player {
 		return getMaximumEnergyPerOrganismM() * factor;
 	}
 
-	protected boolean weHaveFewNeighbors(MoveInput input) {
+	public boolean weHaveFewNeighbors(MoveInput input) {
 		return Stats.neighborCount(input.getNeighbors()) < 1;
 	}
 
-	protected Boolean nStepsHavePassedSinceWeLastHadChild(int steps) {
+	public Boolean nStepsHavePassedSinceWeLastHadChild(int steps) {
 		return getStepsSinceWeHadLastChild() > steps;
 	}
 	
-	protected Integer getMaximumEnergyPerOrganismM() {
+	public Integer getMaximumEnergyPerOrganismM() {
 		return getGame().M();
 	}
 	
-	protected Integer getEnergyConsumedByMovingOrReproducingV() {
+	public Integer getEnergyConsumedByMovingOrReproducingV() {
 		return getGame().v();
 	}
 	
-	protected Integer getEnergyPerUnitOfFoodU() {
+	public Integer getEnergyPerUnitOfFoodU() {
 		return getGame().u();
 	}
 	
-	protected Integer getMaximumFoodUnitsPerCellK(){
+	public Integer getMaximumFoodUnitsPerCellK(){
 		return getGame().K();
 	}
 }

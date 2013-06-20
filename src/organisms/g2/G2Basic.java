@@ -41,9 +41,6 @@ public final class G2Basic extends PlayerBase {
 //			return reproduceTowardsFood(input);
 //		}	
 //		
-//		if(input.getFoodLeft() > 0 && shouldConsume(input)) {
-//			return createStayPutMove();
-//		}
 //		
 //		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
 //			if(!shouldMoveToLocation(i, input)) continue;
@@ -53,55 +50,45 @@ public final class G2Basic extends PlayerBase {
 //		
 //		return getMoveFactory().randomMoveAwayFromNeighbors(input);
 	}
-
-	protected boolean shouldMoveToLocation(int i, MoveInput input) {
-		return input.isFoodPresentAt(i) && !input.isNeighborAt(i) && shouldConsume(input);
-	}
-	
-	protected boolean shouldReproduce(MoveInput input){
-		if(nStepsHavePassedSinceWeLastHadChild(10) && nOutOfMTimes(2, 3)){
-			return false;
-		}
-		if (nOutOfMTimes(1, 3)){
-			return false;
-		}
-		if(weHaveReproductionEnergyAndArentCrowded(input)){
-			return true;
-		}
-		return false;
-	}
-
-	protected boolean weHaveReproductionEnergyAndArentCrowded(MoveInput input) {
-		return weHaveEnoughEnergyToReproduce(input) && weHaveFewNeighbors(input);
-	}
-
-	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
-		return input.getEnergyLeft() > factorOfMaximumEnergyPerOrganism(0.85);
-	}
-
-	protected boolean shouldConsume(MoveInput input){
-		if (hasAlotOfEnergy(input.getEnergyLeft())){
-			return false;
-		}
-		if(input.getFoodLeft() < 1){
-			return false;
-		}
-		return true;
-	}
-
-	protected boolean hasAlotOfEnergy(int energyLeft) {
-		return energyLeft > getEnergyConsumedByMovingOrReproducingV() * 5;
-	}
-	
-	protected Move reproduceTowardsFood(MoveInput input) {
-		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
-			if(!shouldMoveToLocation(i, input)) continue;
-			
-			return createReproductionMove(i);
-		}
-		
-		return randomReproduce();
-	}
+//
+//	protected boolean shouldMoveToLocation(int i, MoveInput input) {
+//		return input.isFoodPresentAt(i) && !input.isNeighborAt(i) && shouldConsume(input);
+//	}
+//	
+//	protected boolean shouldReproduce(MoveInput input){
+//		if(nStepsHavePassedSinceWeLastHadChild(10) && nOutOfMTimes(2, 3)){
+//			return false;
+//		}
+//		if (nOutOfMTimes(1, 3)){
+//			return false;
+//		}
+//		if(weHaveReproductionEnergyAndArentCrowded(input)){
+//			return true;
+//		}
+//		return false;
+//	}
+//
+//	protected boolean weHaveReproductionEnergyAndArentCrowded(MoveInput input) {
+//		return weHaveEnoughEnergyToReproduce(input) && weHaveFewNeighbors(input);
+//	}
+//
+//	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
+//		return input.getEnergyLeft() > factorOfMaximumEnergyPerOrganism(0.85);
+//	}
+//
+//	protected boolean hasAlotOfEnergy(int energyLeft) {
+//		return energyLeft > getEnergyConsumedByMovingOrReproducingV() * 5;
+//	}
+//	
+//	protected Move reproduceTowardsFood(MoveInput input) {
+//		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
+//			if(!shouldMoveToLocation(i, input)) continue;
+//			
+//			return createReproductionMove(i);
+//		}
+//		
+//		return randomReproduce();
+//	}
 	public static BehaviorCoordinator getCoordinator() {
 		return coordinator;
 	}
