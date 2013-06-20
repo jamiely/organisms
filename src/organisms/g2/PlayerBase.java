@@ -19,7 +19,8 @@ public abstract class PlayerBase implements Player {
 
 	private String name;
 	private MoveFactory moveFactory;
-	private Memory memory;
+	
+	public Memory memory;
 	
 	@Override
 	public void register(OrganismsGame __amoeba, int key) throws Exception {
@@ -49,8 +50,13 @@ public abstract class PlayerBase implements Player {
 	@Override
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft)
 			throws Exception {
+
 		MoveInput input = MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft);
 		getMemory().rememberInfo(input);
+
+		getMemory().rememberNeighbors(neighbors);
+		getMemory().rememberFood(foodpresent);
+		getMemory().setAge(getMemory().getAge() + 1);
 		
 		Move move = move(input);
 		getMemory().updateLocation(move);
@@ -144,7 +150,7 @@ public abstract class PlayerBase implements Player {
 		this.moveFactory = moveFactory;
 	}
 
-	protected Random getRand() {
+	public Random getRand() {
 		return rand;
 	}
 
@@ -155,22 +161,13 @@ public abstract class PlayerBase implements Player {
 	public Boolean nOutOfMTimes(int n, int m) {
 		return PlayerUtil.nOutOfMTimes(n, m, rand);
 	}
-	
-	protected int getStepsSinceWeHadLastChild() {
-		return getAge() - getAgeAtWhichWeHadLastChild();
-	}
-	
-	
-	protected Double factorOfMaximumEnergyPerOrganism(Double factor) {
+		
+	public Double factorOfMaximumEnergyPerOrganism(Double factor) {
 		return getMaximumEnergyPerOrganismM() * factor;
 	}
 
 	public boolean weHaveFewNeighbors(MoveInput input) {
 		return Stats.neighborCount(input.getNeighbors()) < 1;
-	}
-
-	public Boolean nStepsHavePassedSinceWeLastHadChild(int steps) {
-		return getStepsSinceWeHadLastChild() > steps;
 	}
 	
 	public Integer getMaximumEnergyPerOrganismM() {
