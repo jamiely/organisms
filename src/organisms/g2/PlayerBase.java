@@ -139,12 +139,20 @@ public abstract class PlayerBase implements Player {
 		return createReproductionMove(PlayerUtil.getRandomCardinalDirection(getRand()));
 	}
 	
-	public Move createReproductionMove(int direction) {
+	protected Move createReproductionMove(int direction) {
 		return createReproductionMove(direction, getState());
 	}
 
-	public Move createReproductionMove(int direction, Integer state) {
+	protected Move createReproductionMove(int direction, Integer state) {
 		setOffspringCount(getOffspringCount() + 1);
 		return new Move(REPRODUCE, direction, state);
+	}
+	
+	protected Boolean nOutOfMTimes(int n, int m) {
+		return PlayerUtil.nOutOfMTimes(n, m, rand);
+	}
+	
+	protected int getStepsSinceWeHadLastChild() {
+		return getAge() - getAgeAtWhichWeHadLastChild();
 	}
 }

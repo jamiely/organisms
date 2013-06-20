@@ -1,6 +1,7 @@
 package organisms.g2.data;
 
 public class MoveInput {
+	private static final int STATE_FOR_NO_NEIGHBOR = -1;
 	private Boolean[] foodPresent;
 	private Integer[] neighbors;
 	private Integer foodLeft;
@@ -11,12 +12,27 @@ public class MoveInput {
 	public void setNeighbors(Integer[] neighbors) {
 		this.neighbors = neighbors;
 	}
+	
+	public Integer getNeighborStateAt(int direction) {
+		return getNeighbors()[direction];
+	}
+	
+	public Boolean isNeighborAt(int direction) {
+		return getNeighborStateAt(direction) != STATE_FOR_NO_NEIGHBOR;
+	}
+	
 	public Boolean[] getFoodPresent() {
 		return foodPresent;
 	}
+	
 	public void setFoodPresent(Boolean[] foodPresent) {
 		this.foodPresent = foodPresent;
 	}
+	
+	public Boolean isFoodPresentAt(int i) {
+		return getFoodPresent()[i];
+	}
+	
 	public Integer getFoodLeft() {
 		return foodLeft;
 	}

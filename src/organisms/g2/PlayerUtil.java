@@ -17,4 +17,8 @@ public class PlayerUtil implements Constants {
 	public static Integer randomArrayElement(int[] items, Random rand) {
 		return items[rand.nextInt(items.length)];
 	}
+	
+	public static Boolean nOutOfMTimes(int n, int m, Random rand) {
+		return n > rand.nextInt(m);
+	}
 }

@@ -53,14 +53,14 @@ public final class G2Basic extends PlayerBase {
 	}
 	
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {
-		return input.getFoodPresent()[i] && input.getNeighbors()[i] == -1 && shouldConsume(input.getEnergyLeft(), 0);  
+		return input.isFoodPresentAt(i) && !input.isNeighborAt(i) && shouldConsume(input.getEnergyLeft(), 0);  
 	}
 	
 	protected boolean shouldReproduce(MoveInput input){
-		if(getAge() - getAgeAtWhichWeHadLastChild() > 10 && getRand().nextInt(3) >=1 ){
+		if(getStepsSinceWeHadLastChild() > 10 && getRand().nextInt(3) >=1 ){
 			return false;
 		}
-		if (getRand().nextInt(3) == 2){
+		if (nOutOfMTimes(1, 3)){
 			return false;
 		}
 		if(input.getEnergyLeft() > getGame().M() * 1/2 && Stats.neighborCount(input.getNeighbors()) < 1){
@@ -70,14 +70,19 @@ public final class G2Basic extends PlayerBase {
 		return false;
 	}
 	
+
 	protected boolean shouldConsume(int energyLeft, int foodleft){
-		if (energyLeft >  getGame().v() * 5){
+		if (hasAlotOfEnergy(energyLeft)){
 			return false;
 		}
 		if(foodleft < 1){
 			return false;
 		}
 		return true;
+	}
+
+	protected boolean hasAlotOfEnergy(int energyLeft) {
+		return energyLeft >  getGame().v() * 5;
 	}
 	
 	protected Move reproduceTowardsFood(MoveInput input) {
