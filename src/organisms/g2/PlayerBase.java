@@ -163,7 +163,7 @@ public abstract class PlayerBase implements Player {
 		return new Move(REPRODUCE, direction, state);
 	}
 	
-	protected Boolean nOutOfMTimes(int n, int m) {
+	public Boolean nOutOfMTimes(int n, int m) {
 		return PlayerUtil.nOutOfMTimes(n, m, rand);
 	}
 	
