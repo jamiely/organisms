@@ -13,8 +13,7 @@ public class ExploreBehavior extends BehaviorBase {
 		if(iDontKnowWhatToDo()) return null;
 		if(itIsBetterToStayPut()) return getMoveFactory().stayPutMove();
 		
-		// TODO implement me! Return null if we don't want to use any move
-		return null;
+	
 	}
 	
 	protected Boolean iDontKnowWhatToDo() {
