@@ -82,6 +82,10 @@ public class Memory implements Constants {
 		return moves.peek();
 	}
 	
+	public Boolean hasLastDirection() {
+		return !moves.empty();
+	}
+	
 	public void rememberFood(boolean[] foodpresent){
 		for(int i = 1, size = foodpresent.length; i < size; i++) {
 			if(foodpresent[i]){

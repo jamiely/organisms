@@ -2,6 +2,7 @@ package organisms.g2.behaviors;
 
 import organisms.Constants;
 import organisms.Move;
+import organisms.g2.Memory;
 import organisms.g2.MoveFactory;
 import organisms.g2.MoveProvider;
 import organisms.g2.PlayerBase;
@@ -22,6 +23,11 @@ public abstract class BehaviorBase implements MoveProvider, Constants {
 	public void setPlayer(PlayerBase player) {
 		this.player = player;
 	}
+	
+	public Memory getMemory() {
+		return getPlayer().getMemory();
+	}
+	
 	protected MoveFactory getMoveFactory() {
 		return getPlayer().getMoveFactory();
 	}

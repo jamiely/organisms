@@ -30,7 +30,7 @@ public abstract class PlayerBase implements Player {
 		setColor(Color.GREEN);
 		setRand(new Random());
 		setMoveFactory(new MoveFactory(rand));
-		memory = new Memory();	
+		setMemory(new Memory());	
 	}
 
 	@Override
@@ -51,13 +51,13 @@ public abstract class PlayerBase implements Player {
 	@Override
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft)
 			throws Exception {
-		
-		memory.rememberNeighbors(neighbors);
-		memory.rememberFood(foodpresent);
-		memory.increaseAge();
+
+		getMemory().rememberNeighbors(neighbors);
+		getMemory().rememberFood(foodpresent);
+		getMemory().setAge(getMemory().getAge() + 1);
 		
 		Move move = move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
-		memory.updateLocation(move);
+		getMemory().updateLocation(move);
 		
 		return move;
 	}
@@ -80,27 +80,27 @@ public abstract class PlayerBase implements Player {
 	
 
 	public Integer getOffspringCount() {
-		return memory.getOffspringCount();
+		return getMemory().getOffspringCount();
 	}
 
 	public void setOffspringCount(Integer offspringCount) {
-		memory.setOffspringCount(offspringCount);
+		getMemory().setOffspringCount(offspringCount);
 	}
 
 	public Integer getAge() {
-		return memory.getAge();
+		return getMemory().getAge();
 	}
 
 	public void setAge(Integer age) {
-		memory.setAge(age);
+		getMemory().setAge(age);
 	}
 
 	public Integer getAgeAtWhichWeHadLastChild() {
-		return memory.getAgeAtWhichWeHadLastChild();
+		return getMemory().getAgeAtWhichWeHadLastChild();
 	}
 
 	public void setAgeAtWhichWeHadLastChild(Integer ageAtWhichWeHadLastChild) {
-		memory.setAgeAtWhichWeHadLastChild(ageAtWhichWeHadLastChild);
+		getMemory().setAgeAtWhichWeHadLastChild(ageAtWhichWeHadLastChild);
 	}
 
 	public int getState() {
@@ -187,5 +187,13 @@ public abstract class PlayerBase implements Player {
 	
 	public Integer getMaximumFoodUnitsPerCellK(){
 		return getGame().K();
+	}
+
+	public Memory getMemory() {
+		return memory;
+	}
+
+	public void setMemory(Memory memory) {
+		this.memory = memory;
 	}
 }

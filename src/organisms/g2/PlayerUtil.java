@@ -3,6 +3,7 @@ package organisms.g2;
 import java.util.Random;
 
 import organisms.Constants;
+import organisms.Move;
 
 public class PlayerUtil implements Constants {
 	public static int[] getCardinalDirections() {
@@ -20,5 +21,16 @@ public class PlayerUtil implements Constants {
 	
 	public static Boolean nOutOfMTimes(int n, int m, Random rand) {
 		return n > rand.nextInt(m);
+	}
+	
+	public static int oppositeDirection(int direction) {
+		switch (direction) {
+		case STAYPUT: return STAYPUT;
+		case WEST: return EAST;
+		case EAST: return WEST;
+		case NORTH: return SOUTH;
+		case SOUTH: return NORTH;
+		}
+		return STAYPUT;
 	}
 }

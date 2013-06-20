@@ -12,7 +12,7 @@ public class HungryBehavior extends BehaviorBase {
 	public Move move(MoveInput input) {
 		if(!iAmHungry(input)) return null;
 		
-		if(input.getFoodLeft() > 0 && shouldConsume(input)) {
+		if(input.getFoodLeft() > 2) {
 			return getMoveFactory().stayPutMove();
 		}
 		
@@ -33,13 +33,7 @@ public class HungryBehavior extends BehaviorBase {
 		return input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
 	}
 	
-	protected boolean shouldConsume(MoveInput input){
-		if(input.getFoodLeft() < 1){
-			return false;
-		}
-		return true;
-	}
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {
-		return input.isFoodPresentAt(i) && !input.isNeighborAt(i) && shouldConsume(input);
+		return input.isFoodPresentAt(i) && !input.isNeighborAt(i);
 	}
 }
