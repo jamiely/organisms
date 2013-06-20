@@ -13,6 +13,7 @@ public class MoveInput {
 		this.neighbors = neighbors;
 	}
 	
+	
 	public Integer getNeighborStateAt(int direction) {
 		return getNeighbors()[direction];
 	}
@@ -29,42 +30,14 @@ public class MoveInput {
 		this.foodPresent = foodPresent;
 	}
 	
+	
 	public Boolean isFoodPresentAt(int i) {
 		if(getFoodPresent()[i]){
-			addFood(i);
 			return true;
 		}
 		return getFoodPresent()[i];
 	}
 	
-	/**
-	 * @param i
-	 */
-	private void addFood(int i) {
-		
-		//TODO add to ArryList of locations
-		
-//		switch(i)
-//	    {
-//		    case 0:
-//			    return;
-//		    case 1:
-//		    	int[] food = location;
-//		    	foodLocations.add(location[1] -=1;
-//			    return;
-//		    case 2:
-//		    	location[1] +=1;
-//		    	return;
-//		    case 3:
-//		    	location[0] -=1;
-//		    	return;
-//		    case 4:
-//		    	location[0] +=1;
-//		    	return;
-//	    }
-//	    return;
-		
-	}
 	public Integer getFoodLeft() {
 		return foodLeft;
 	}
