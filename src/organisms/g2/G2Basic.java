@@ -17,7 +17,7 @@ public final class G2Basic extends PlayerBase {
 	{
 		super.register(game, key);
 		setName("G2Basic");
-		setColor(Color.PINK);
+		setColor(Color.BLUE);
 	}
 
 	/*
