@@ -73,7 +73,7 @@ public final class G2Basic extends PlayerBase {
 	}
 
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
-		return input.getEnergyLeft() > factorOfMaximumEnergyPerOrganism(0.5);
+		return input.getEnergyLeft() > factorOfMaximumEnergyPerOrganism(0.85);
 	}
 
 	protected boolean shouldConsume(MoveInput input){

@@ -1736,6 +1736,7 @@ void printBoard()
 	}
 	private void showSummary() {
 		int _MAX = numPlayers();
+		int extinction = 0;
 		
 		PlayerRoundData[] cumulativeData = new PlayerRoundData[_MAX];
 		for(Round round: lastRounds) {
@@ -1744,6 +1745,10 @@ void printBoard()
 	        for (int i=0; i < _MAX; i++) {
 			    int pop = data[i].count;
 			    int totalE = data[i].energy;
+			    
+			    if (pop == 0){
+			    	extinction++;
+			    }
 			    
 			    if(cumulativeData[i] == null) {
 			    	cumulativeData[i] = new PlayerRoundData(data[i].playerId, 0, 0);
@@ -1761,9 +1766,10 @@ void printBoard()
 		
 		println(String.format("[SUMMARY of %d trials]", trials));
 		for(PlayerRoundData data: cumulativeData) {
-			println(String.format("Player: %d Mean Count: %d Mean Energy: %d", data.playerId, data.count, data.energy));
+			println(String.format("Player: %d Mean Count: %d Mean Energy: %d Extinction: %d", data.playerId, data.count, data.energy, extinction));
 		}
 	}
+	
 	protected void println(String message) {
 		try { getGame().println(message); } catch(Exception ex) {}
 	}
