@@ -53,6 +53,7 @@ public abstract class PlayerBase implements Player {
 	@Override
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft)
 			throws Exception {
+		setAge(getAge() + 1);
 		return move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
 	}
 	

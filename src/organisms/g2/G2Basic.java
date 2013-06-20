@@ -28,11 +28,6 @@ public final class G2Basic extends PlayerBase {
 	 * energyleft is this organism's remaining energy
 	 */
 	public Move move(MoveInput input) {
-
-		//TODO this is a hack to avoid moving to a neighbor
-		
-		setAge(getAge() + 1);
-		
 		if(shouldReproduce(input)) {
 			return reproduceTowardsFood(input);
 		}	
@@ -41,12 +36,12 @@ public final class G2Basic extends PlayerBase {
 			return createStayPutMove();
 		}
 		
-		// redundant for staying put
-		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
-			if(!shouldMoveToLocation(i, input)) continue;
-	
-			return createMove(i);
-		}
+//		// redundant for staying put
+//		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
+//			if(!shouldMoveToLocation(i, input)) continue;
+//	
+//			return createMove(i);
+//		}
 		
 		return getMoveFactory().randomMoveAwayFromNeighbors(input);
 	}
