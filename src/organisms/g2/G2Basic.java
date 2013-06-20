@@ -34,21 +34,23 @@ public final class G2Basic extends PlayerBase {
 	 * energyleft is this organism's remaining energy
 	 */
 	public Move move(MoveInput input) {
-		if(shouldReproduce(input)) {
-			return reproduceTowardsFood(input);
-		}	
+		return coordinator.move(input);
 		
-		if(input.getFoodLeft() > 0 && shouldConsume(input)) {
-			return createStayPutMove();
-		}
-		
-		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
-			if(!shouldMoveToLocation(i, input)) continue;
-	
-			return createMove(i);
-		}
-		
-		return getMoveFactory().randomMoveAwayFromNeighbors(input);
+//		if(shouldReproduce(input)) {
+//			return reproduceTowardsFood(input);
+//		}	
+//		
+//		if(input.getFoodLeft() > 0 && shouldConsume(input)) {
+//			return createStayPutMove();
+//		}
+//		
+//		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
+//			if(!shouldMoveToLocation(i, input)) continue;
+//	
+//			return createMove(i);
+//		}
+//		
+//		return getMoveFactory().randomMoveAwayFromNeighbors(input);
 	}
 
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {
