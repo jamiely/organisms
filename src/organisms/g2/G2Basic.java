@@ -3,11 +3,16 @@ package organisms.g2;
 import java.awt.Color;
 
 import organisms.*;
+import organisms.g2.behaviors.BehaviorCoordinator;
+import organisms.g2.behaviors.ExploreBehavior;
+import organisms.g2.behaviors.HungryBehavior;
+import organisms.g2.behaviors.ReproductionBehavior;
 import organisms.g2.data.MoveInput;
 import organisms.g2.stats.Stats;
 
 public final class G2Basic extends PlayerBase {
 	private static final long serialVersionUID = -3612443241236355755L;
+	private static BehaviorCoordinator coordinator = null;
 	
 	/*
 	 * This method is called when the Organism is created.
@@ -18,6 +23,7 @@ public final class G2Basic extends PlayerBase {
 		super.register(game, key);
 		setName("G2Basic");
 		setColor(Color.PINK);
+		setCoordinator(newBehaviorCoordinator());
 	}
 
 	/*
@@ -93,5 +99,18 @@ public final class G2Basic extends PlayerBase {
 		
 		return randomReproduce();
 	}
+	public static BehaviorCoordinator getCoordinator() {
+		return coordinator;
+	}
+	public static void setCoordinator(BehaviorCoordinator coordinator) {
+		G2Basic.coordinator = coordinator;
+	}
 
+	protected static BehaviorCoordinator newBehaviorCoordinator() {
+		BehaviorCoordinator coordinator = new BehaviorCoordinator();
+		coordinator.addBehavior(new HungryBehavior());
+		coordinator.addBehavior(new ReproductionBehavior());
+		coordinator.addBehavior(new ExploreBehavior());
+		return coordinator;
+	}
 }
