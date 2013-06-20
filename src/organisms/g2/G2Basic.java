@@ -24,7 +24,7 @@ public final class G2Basic extends PlayerBase {
 		super.register(game, key);
 		setName("G2Basic");
 		setColor(Color.PINK);
-		setCoordinator(newBehaviorCoordinator());
+		setCoordinator(newBehaviorCoordinator(this));
 	}
 
 	/*
@@ -109,12 +109,12 @@ public final class G2Basic extends PlayerBase {
 		G2Basic.coordinator = coordinator;
 	}
 
-	protected static BehaviorCoordinator newBehaviorCoordinator() {
+	protected static BehaviorCoordinator newBehaviorCoordinator(PlayerBase player) {
 		BehaviorCoordinator coordinator = new BehaviorCoordinator();
-		coordinator.addBehavior(new HungryBehavior());
-		coordinator.addBehavior(new ReproductionBehavior());
-		coordinator.addBehavior(new ExploreBehavior());
-		coordinator.addBehavior(new RandomBehavior());
+		coordinator.addBehavior(new HungryBehavior(player));
+		coordinator.addBehavior(new ReproductionBehavior(player));
+		coordinator.addBehavior(new ExploreBehavior(player));
+		coordinator.addBehavior(new RandomBehavior(player));
 		return coordinator;
 	}
 }
