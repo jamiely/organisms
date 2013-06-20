@@ -12,6 +12,9 @@ public class MoveFactory implements Constants {
 	public MoveFactory() {
 		rand = new Random();
 	}
+	public MoveFactory(Random rand) {
+		this.rand = rand;
+	}
 	public Move stayPutMove() {
 		return new Move(STAYPUT);
 	}
@@ -52,9 +55,7 @@ public class MoveFactory implements Constants {
 		if(!mayStayPut) {
 			direction = rand.nextInt(4) + 1;
 		}
-		
-		//if(!mayStayPut && direction == STAYPUT) return randomMove(mayStayPut);
-		
+
 		// this player selects randomly
 		switch (direction) {
 		case 0: m = new Move(STAYPUT); break;
@@ -62,7 +63,6 @@ public class MoveFactory implements Constants {
 		case 2: m = new Move(EAST); break;
 		case 3: m = new Move(NORTH); break;
 		case 4: m = new Move(SOUTH); break;
-		//case 5:	return randomReproduce();
 		}
 		return m;
 	}
