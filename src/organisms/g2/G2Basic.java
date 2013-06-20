@@ -36,18 +36,17 @@ public final class G2Basic extends PlayerBase {
 			return createStayPutMove();
 		}
 		
-//		// redundant for staying put
-//		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
-//			if(!shouldMoveToLocation(i, input)) continue;
-//	
-//			return createMove(i);
-//		}
+		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
+			if(!shouldMoveToLocation(i, input)) continue;
+	
+			return createMove(i);
+		}
 		
 		return getMoveFactory().randomMoveAwayFromNeighbors(input);
 	}
-	
+
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {
-		return false;
+		return input.isFoodPresentAt(i) && !input.isNeighborAt(i) && shouldConsume(input);
 	}
 	
 	protected boolean shouldReproduce(MoveInput input){
@@ -82,7 +81,7 @@ public final class G2Basic extends PlayerBase {
 	}
 
 	protected boolean hasAlotOfEnergy(int energyLeft) {
-		return energyLeft > getGame().v() * 5;
+		return energyLeft > getEnergyConsumedByMovingOrReproducingV() * 5;
 	}
 	
 	protected Move reproduceTowardsFood(MoveInput input) {
