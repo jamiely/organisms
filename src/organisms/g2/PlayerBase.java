@@ -7,6 +7,7 @@ import organisms.Move;
 import organisms.OrganismsGame;
 import organisms.Player;
 import organisms.g2.data.MoveInput;
+import organisms.g2.stats.Stats;
 
 public abstract class PlayerBase implements Player {
 	private static final long serialVersionUID = -2855747689179359665L;
@@ -139,12 +140,21 @@ public abstract class PlayerBase implements Player {
 		return createReproductionMove(PlayerUtil.getRandomCardinalDirection(getRand()));
 	}
 	
+	protected Move createStayPutMove() {
+		return new Move(STAYPUT);
+	}
+	
+	protected Move createMove(int direction) {
+		return new Move(direction);
+	}
+	
 	protected Move createReproductionMove(int direction) {
 		return createReproductionMove(direction, getState());
 	}
 
 	protected Move createReproductionMove(int direction, Integer state) {
 		setOffspringCount(getOffspringCount() + 1);
+		setAgeAtWhichWeHadLastChild(getAge());
 		return new Move(REPRODUCE, direction, state);
 	}
 	
@@ -154,5 +164,34 @@ public abstract class PlayerBase implements Player {
 	
 	protected int getStepsSinceWeHadLastChild() {
 		return getAge() - getAgeAtWhichWeHadLastChild();
+	}
+	
+	
+	protected Double factorOfMaximumEnergyPerOrganism(Double factor) {
+		return getMaximumEnergyPerOrganismM() * factor;
+	}
+
+	protected boolean weHaveFewNeighbors(MoveInput input) {
+		return Stats.neighborCount(input.getNeighbors()) < 1;
+	}
+
+	protected Boolean nStepsHavePassedSinceWeLastHadChild(int steps) {
+		return getStepsSinceWeHadLastChild() > steps;
+	}
+	
+	protected Integer getMaximumEnergyPerOrganismM() {
+		return getGame().M();
+	}
+	
+	protected Integer getEnergyConsumedByMovingOrReproducingV() {
+		return getGame().v();
+	}
+	
+	protected Integer getEnergyPerUnitOfFoodU() {
+		return getGame().u();
+	}
+	
+	protected Integer getMaximumFoodUnitsPerCellK(){
+		return getGame().K();
 	}
 }

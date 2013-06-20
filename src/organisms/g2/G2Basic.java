@@ -37,15 +37,15 @@ public final class G2Basic extends PlayerBase {
 			return reproduceTowardsFood(input);
 		}	
 		
-		if(input.getFoodLeft() > 0 && shouldConsume(input.getEnergyLeft(), input.getFoodLeft())) {
-			return new Move(STAYPUT);
+		if(input.getFoodLeft() > 0 && shouldConsume(input)) {
+			return createStayPutMove();
 		}
 		
 		// redundant for staying put
 		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
 			if(!shouldMoveToLocation(i, input)) continue;
 	
-			return new Move(i);
+			return createMove(i);
 		}
 		
 		return getMoveFactory().randomMoveAwayFromNeighbors(input);
@@ -56,32 +56,38 @@ public final class G2Basic extends PlayerBase {
 	}
 	
 	protected boolean shouldReproduce(MoveInput input){
-		if(getStepsSinceWeHadLastChild() > 10 && getRand().nextInt(3) >=1 ){
+		if(nStepsHavePassedSinceWeLastHadChild(10) && nOutOfMTimes(2, 3)){
 			return false;
 		}
 		if (nOutOfMTimes(1, 3)){
 			return false;
 		}
-		if(input.getEnergyLeft() > getGame().M() * 1/2 && Stats.neighborCount(input.getNeighbors()) < 1){
-			setAgeAtWhichWeHadLastChild(getAge());
+		if(weHaveReproductionEnergyAndArentCrowded(input)){
 			return true;
 		}
 		return false;
 	}
-	
 
-	protected boolean shouldConsume(int energyLeft, int foodleft){
-		if (hasAlotOfEnergy(energyLeft)){
+	protected boolean weHaveReproductionEnergyAndArentCrowded(MoveInput input) {
+		return weHaveEnoughEnergyToReproduce(input) && weHaveFewNeighbors(input);
+	}
+
+	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
+		return input.getEnergyLeft() > factorOfMaximumEnergyPerOrganism(0.5);
+	}
+
+	protected boolean shouldConsume(MoveInput input){
+		if (hasAlotOfEnergy(input.getEnergyLeft())){
 			return false;
 		}
-		if(foodleft < 1){
+		if(input.getFoodLeft() < 1){
 			return false;
 		}
 		return true;
 	}
 
 	protected boolean hasAlotOfEnergy(int energyLeft) {
-		return energyLeft >  getGame().v() * 5;
+		return energyLeft > getGame().v() * 5;
 	}
 	
 	protected Move reproduceTowardsFood(MoveInput input) {
