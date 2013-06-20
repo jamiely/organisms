@@ -1,7 +1,6 @@
 package organisms.g2.behaviors;
 
 import organisms.Move;
-import organisms.g2.MoveFactory;
 import organisms.g2.PlayerBase;
 import organisms.g2.data.MoveInput;
 

@@ -9,7 +9,6 @@ import organisms.g2.behaviors.HungryBehavior;
 import organisms.g2.behaviors.RandomBehavior;
 import organisms.g2.behaviors.ReproductionBehavior;
 import organisms.g2.data.MoveInput;
-import organisms.g2.stats.Stats;
 
 public final class G2Basic extends PlayerBase {
 	private static final long serialVersionUID = -3612443241236355755L;

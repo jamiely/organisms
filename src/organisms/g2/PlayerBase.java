@@ -1,7 +1,6 @@
 package organisms.g2;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Random;
 
 import organisms.Move;
@@ -50,12 +49,15 @@ public abstract class PlayerBase implements Player {
 	@Override
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft)
 			throws Exception {
-		getMemory().rememberNeighbors(neighbors);
-		getMemory().rememberFood(foodpresent);
-		getMemory().setAge(getMemory().getAge() + 1);
+		MoveInput input = MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft);
+		getMemory().rememberInfo(input);
 		
-		Move move = move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
+		Move move = move(input);
 		getMemory().updateLocation(move);
+		if(move.type() == REPRODUCE) {
+			birth();
+		}
+		setAge(getAge() + 1);
 		
 		return move;
 	}
@@ -83,6 +85,15 @@ public abstract class PlayerBase implements Player {
 
 	public void setOffspringCount(Integer offspringCount) {
 		getMemory().setOffspringCount(offspringCount);
+	}
+	
+	public void incrementOffspring() {
+		setOffspringCount(getOffspringCount()+1);
+	}
+	
+	public void birth() {
+		incrementOffspring();
+		setAgeAtWhichWeHadLastChild(getAge());
 	}
 
 	public Integer getAge() {
@@ -139,28 +150,6 @@ public abstract class PlayerBase implements Player {
 
 	protected void setRand(Random rand) {
 		this.rand = rand;
-	}
-
-	protected Move randomReproduce() {
-		return createReproductionMove(PlayerUtil.getRandomCardinalDirection(getRand()));
-	}
-	
-	protected Move createStayPutMove() {
-		return moveFactory.stayPutMove();
-	}
-	
-	protected Move createMove(int direction) {
-		return new Move(direction);
-	}
-	
-	protected Move createReproductionMove(int direction) {
-		return createReproductionMove(direction, getState());
-	}
-
-	protected Move createReproductionMove(int direction, Integer state) {
-		setOffspringCount(getOffspringCount() + 1);
-		setAgeAtWhichWeHadLastChild(getAge());
-		return new Move(REPRODUCE, direction, state);
 	}
 	
 	public Boolean nOutOfMTimes(int n, int m) {

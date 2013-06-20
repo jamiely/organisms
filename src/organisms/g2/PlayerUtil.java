@@ -1,9 +1,7 @@
 package organisms.g2;
 
 import java.util.Random;
-
 import organisms.Constants;
-import organisms.Move;
 
 public class PlayerUtil implements Constants {
 	public static int[] getCardinalDirections() {

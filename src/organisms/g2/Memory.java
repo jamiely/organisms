@@ -9,14 +9,16 @@ import java.util.Stack;
 
 import organisms.Move;
 import organisms.Constants;
+import organisms.g2.data.MoveInput;
+import organisms.g2.data.Point;
 
 /**
  * @author Anne
  *
  */
 public class Memory implements Constants {
-	private int[] location;
-	private ArrayList<int[]> foodLocations;
+	private Point location;
+	private ArrayList<Point> foodLocations;
 	
 	private int age;
 	private Integer ageAtWhichWeHadLastChild;
@@ -26,8 +28,8 @@ public class Memory implements Constants {
 	private Stack<Integer> moves;
 
 	public Memory(){
-		location = new int[] {0,0};
-		foodLocations = new ArrayList<int[]> ();
+		location = new Point(0, 0);
+		foodLocations = new ArrayList<Point> ();
 		
 		age = 0;
 		ageAtWhichWeHadLastChild = 0;
@@ -63,16 +65,16 @@ public class Memory implements Constants {
 		    case STAYPUT:
 			    return;
 		    case WEST:
-		    	location[1] -=1;
+		    	location.x -=1;
 			    return;
 		    case EAST:
-		    	location[1] +=1;
+		    	location.x +=1;
 		    	return;
 		    case NORTH:
-		    	location[0] -=1;
+		    	location.y -=1;
 		    	return;
 		    case SOUTH:
-		    	location[0] +=1;
+		    	location.y +=1;
 		    	return;
 	    }
 	    return;
@@ -86,7 +88,12 @@ public class Memory implements Constants {
 		return !moves.empty();
 	}
 	
-	public void rememberFood(boolean[] foodpresent){
+	public void rememberInfo(MoveInput input) {
+		rememberNeighbors(input.getNeighbors());
+		rememberFood(input.getFoodPresent());
+	}
+	
+	public void rememberFood(Boolean[] foodpresent){
 		for(int i = 1, size = foodpresent.length; i < size; i++) {
 			if(foodpresent[i]){
 				addFood(i);
@@ -95,7 +102,7 @@ public class Memory implements Constants {
 	}
 	
 	public void addFood(int i){
-		int[] foodLocation = location;
+		Point foodLocation = location;
 		switch(i)
 		 {
 		    case STAYPUT:
@@ -104,25 +111,25 @@ public class Memory implements Constants {
 		    	}
 			    return;
 		    case WEST:
-		    	foodLocation[1] -=1;
+		    	foodLocation.x -=1;
 		    	if (!foodLocations.contains(foodLocation)){
 		    		foodLocations.add(foodLocation);
 		    	}
 			    return;
 		    case EAST:
-		    	foodLocation[1] +=1;
+		    	foodLocation.x +=1;
 		    	if (!foodLocations.contains(foodLocation)){
 		    		foodLocations.add(foodLocation);
 		    	}
 		    	return;
 		    case NORTH:
-		    	foodLocation[0] -=1;
+		    	foodLocation.y -=1;
 		    	if (!foodLocations.contains(foodLocation)){
 		    		foodLocations.add(foodLocation);
 		    	}
 		    	return;
 		    case SOUTH:
-		    	foodLocation[0] +=1;
+		    	foodLocation.y +=1;
 		    	if (!foodLocations.contains(foodLocation)){
 		    		foodLocations.add(foodLocation);
 		    	}
@@ -149,7 +156,7 @@ public class Memory implements Constants {
 	    }
 	}
 	
-	public void rememberNeighbors(int[] neighbors){
+	public void rememberNeighbors(Integer[] neighbors){
 		for(int i = 1, size = neighbors.length; i < size; i++) {
 			if(neighbors[i] != -1){
 				addNeighbor(i);
