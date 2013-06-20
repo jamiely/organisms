@@ -20,7 +20,8 @@ public abstract class PlayerBase implements Player {
 
 	private String name;
 	private MoveFactory moveFactory;
-	private Memory memory;
+	
+	public Memory memory;
 	
 	@Override
 	public void register(OrganismsGame __amoeba, int key) throws Exception {
@@ -50,9 +51,10 @@ public abstract class PlayerBase implements Player {
 	@Override
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft)
 			throws Exception {
+		
 		memory.rememberNeighbors(neighbors);
 		memory.rememberFood(foodpresent);
-		memory.setAge(memory.getAge() + 1);
+		memory.increaseAge();
 		
 		Move move = move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
 		memory.updateLocation(move);
@@ -133,16 +135,12 @@ public abstract class PlayerBase implements Player {
 		this.moveFactory = moveFactory;
 	}
 
-	protected Random getRand() {
+	public Random getRand() {
 		return rand;
 	}
 
 	protected void setRand(Random rand) {
 		this.rand = rand;
-	}
-
-	protected Move randomReproduce() {
-		return createReproductionMove(PlayerUtil.getRandomCardinalDirection(getRand()));
 	}
 	
 	protected Move createStayPutMove() {
@@ -157,31 +155,22 @@ public abstract class PlayerBase implements Player {
 		return createReproductionMove(direction, getState());
 	}
 
-	protected Move createReproductionMove(int direction, Integer state) {
+	public Move createReproductionMove(int direction, Integer state) {
 		setOffspringCount(getOffspringCount() + 1);
 		setAgeAtWhichWeHadLastChild(getAge());
 		return new Move(REPRODUCE, direction, state);
 	}
 	
-	protected Boolean nOutOfMTimes(int n, int m) {
+	public Boolean nOutOfMTimes(int n, int m) {
 		return PlayerUtil.nOutOfMTimes(n, m, rand);
 	}
-	
-	protected int getStepsSinceWeHadLastChild() {
-		return getAge() - getAgeAtWhichWeHadLastChild();
-	}
-	
-	
-	protected Double factorOfMaximumEnergyPerOrganism(Double factor) {
+		
+	public Double factorOfMaximumEnergyPerOrganism(Double factor) {
 		return getMaximumEnergyPerOrganismM() * factor;
 	}
 
 	public boolean weHaveFewNeighbors(MoveInput input) {
 		return Stats.neighborCount(input.getNeighbors()) < 1;
-	}
-
-	public Boolean nStepsHavePassedSinceWeLastHadChild(int steps) {
-		return getStepsSinceWeHadLastChild() > steps;
 	}
 	
 	public Integer getMaximumEnergyPerOrganismM() {
