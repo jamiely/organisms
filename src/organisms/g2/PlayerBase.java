@@ -18,26 +18,18 @@ public abstract class PlayerBase implements Player {
 	private OrganismsGame game;
 	private Color color;
 
-	private Integer offspringCount;
-	private Integer age;
-	private Integer ageAtWhichWeHadLastChild;
 	private String name;
 	private MoveFactory moveFactory;
-	private int[] location;
-	private ArrayList<int[]> foodLocations;
+	private Memory memory;
 	
 	@Override
 	public void register(OrganismsGame __amoeba, int key) throws Exception {
 		setState(0);
 		setGame(__amoeba);
-		setOffspringCount(0);
-		setAge(0);
-		setAgeAtWhichWeHadLastChild(0);
 		setColor(Color.GREEN);
 		setMoveFactory(new MoveFactory());
-		setRand(new Random());
-		location = new int[] {0,0};
-		ArrayList<int[]> foodLocations = new ArrayList<int[]>();
+		memory = new Memory();
+		
 	}
 
 	@Override
@@ -60,33 +52,10 @@ public abstract class PlayerBase implements Player {
 			throws Exception {
 		setAge(getAge() + 1);
 		Move move = move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
-		updateLocation(move);
+		memory.updateLocation(move);
 		return move;
 	}
 	
-	/**
-	 * @param move
-	 */
-	private void updateLocation(Move move) {
-		switch(move.type())
-	    {
-		    case STAYPUT:
-			    return;
-		    case WEST:
-		    	location[1] -=1;
-			    return;
-		    case EAST:
-		    	location[1] +=1;
-		    	return;
-		    case NORTH:
-		    	location[0] -=1;
-		    	return;
-		    case SOUTH:
-		    	location[0] +=1;
-		    	return;
-	    }
-	    return;
-	}
 
 	public abstract Move move(MoveInput input);
 
@@ -105,27 +74,27 @@ public abstract class PlayerBase implements Player {
 	
 
 	public Integer getOffspringCount() {
-		return offspringCount;
+		return memory.getOffspringCount();
 	}
 
 	public void setOffspringCount(Integer offspringCount) {
-		this.offspringCount = offspringCount;
+		memory.setOffspringCount(offspringCount);
 	}
 
 	public Integer getAge() {
-		return age;
+		return memory.getAge();
 	}
 
 	public void setAge(Integer age) {
-		this.age = age;
+		memory.setAge(age);
 	}
 
 	public Integer getAgeAtWhichWeHadLastChild() {
-		return ageAtWhichWeHadLastChild;
+		return memory.getAgeAtWhichWeHadLastChild();
 	}
 
 	public void setAgeAtWhichWeHadLastChild(Integer ageAtWhichWeHadLastChild) {
-		this.ageAtWhichWeHadLastChild = ageAtWhichWeHadLastChild;
+		memory.setAgeAtWhichWeHadLastChild(ageAtWhichWeHadLastChild);
 	}
 
 	public int getState() {
