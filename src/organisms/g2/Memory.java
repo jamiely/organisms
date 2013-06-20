@@ -5,7 +5,7 @@ package organisms.g2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Stack;
 
 import organisms.Move;
 import organisms.Constants;
@@ -23,9 +23,9 @@ public class Memory implements Constants {
 	private Integer offspringCount;
 	
 	private HashMap<Integer, Integer> neighbors;
-	private LinkedList<Integer> moves;
+	private Stack<Integer> moves;
 
-	public void Memory(){
+	public Memory(){
 		location = new int[] {0,0};
 		foodLocations = new ArrayList<int[]> ();
 		
@@ -34,11 +34,17 @@ public class Memory implements Constants {
 		offspringCount = 0;
 		
 		neighbors = new HashMap<Integer, Integer>();
-		
-		moves = new LinkedList<Integer>();
-		
+		initiateMap();
 		
 		
+		moves = new Stack<Integer>();
+	}
+	
+	private void initiateMap(){
+		neighbors.put(1,0);
+		neighbors.put(2,0);
+		neighbors.put(3,0);
+		neighbors.put(4,0);
 	}
 	
 	public void increaseAge(){
@@ -165,11 +171,9 @@ public class Memory implements Constants {
 
 	/**
 	 * @param age2
-	 * @return
 	 */
-	public Object setAge(int age) {
+	public void setAge(int age) {
 		this.age = age;
-		return null;
 	}
 
 	/**
