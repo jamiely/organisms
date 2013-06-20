@@ -1,6 +1,7 @@
 package organisms.g2;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Random;
 
 import organisms.Move;
@@ -22,6 +23,8 @@ public abstract class PlayerBase implements Player {
 	private Integer ageAtWhichWeHadLastChild;
 	private String name;
 	private MoveFactory moveFactory;
+	private int[] location;
+	private ArrayList<int[]> foodLocations;
 	
 	@Override
 	public void register(OrganismsGame __amoeba, int key) throws Exception {
@@ -33,6 +36,8 @@ public abstract class PlayerBase implements Player {
 		setColor(Color.GREEN);
 		setMoveFactory(new MoveFactory());
 		setRand(new Random());
+		location = new int[] {0,0};
+		ArrayList<int[]> foodLocations = new ArrayList<int[]>();
 	}
 
 	@Override
@@ -54,9 +59,35 @@ public abstract class PlayerBase implements Player {
 	public Move move(boolean[] foodpresent, int[] neighbors, int foodleft, int energyleft)
 			throws Exception {
 		setAge(getAge() + 1);
-		return move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
+		Move move = move(MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft));
+		updateLocation(move);
+		return move;
 	}
 	
+	/**
+	 * @param move
+	 */
+	private void updateLocation(Move move) {
+		switch(move.type())
+	    {
+		    case STAYPUT:
+			    return;
+		    case WEST:
+		    	location[1] -=1;
+			    return;
+		    case EAST:
+		    	location[1] +=1;
+		    	return;
+		    case NORTH:
+		    	location[0] -=1;
+		    	return;
+		    case SOUTH:
+		    	location[0] +=1;
+		    	return;
+	    }
+	    return;
+	}
+
 	public abstract Move move(MoveInput input);
 
 	@Override
