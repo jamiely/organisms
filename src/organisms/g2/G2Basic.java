@@ -49,11 +49,10 @@ public final class G2Basic extends PlayerBase {
 		}
 		
 		return getMoveFactory().randomMoveAwayFromNeighbors(input);
-//		return randomMove(false);
 	}
 	
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {
-		return input.isFoodPresentAt(i) && !input.isNeighborAt(i) && shouldConsume(input.getEnergyLeft(), 0);  
+		return false;
 	}
 	
 	protected boolean shouldReproduce(MoveInput input){
