@@ -4,6 +4,8 @@ import organisms.Move;
 import organisms.g2.PlayerBase;
 import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
+import organisms.g2.signals.FoodIsInDirection;
+import organisms.g2.signals.SignalMapper;
 
 public class ReproductionBehavior extends BehaviorBase {
 	private double energyToReporduce = .85;
@@ -62,9 +64,18 @@ public class ReproductionBehavior extends BehaviorBase {
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {
 		return input.isFoodPresentAt(i) && !input.isNeighborAt(i);
 	}
-
-	protected int giveMessageToChild(){
+	
+	protected int getFoodDirection() {
+		// TODO using memory
 		return 0;
+	}
+	
+	protected FoodIsInDirection getFoodDirectionSignal() {
+		return new FoodIsInDirection(getFoodDirection());
+	}
+
+	protected int getMessageForChild(){
+		return SignalMapper.getInstance().getStateForSignal(getFoodDirectionSignal());
 	}
 	
 	protected Move randomReproduce(MoveInput input) {
@@ -76,6 +87,6 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	
 	protected Move reproductionMove(int direction) {
-		return getMoveFactory().reproductionMove(direction, giveMessageToChild());
+		return getMoveFactory().reproductionMove(direction, getMessageForChild());
 	}
 }

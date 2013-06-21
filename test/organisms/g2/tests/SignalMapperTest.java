@@ -1,7 +1,6 @@
 package organisms.g2.tests;
 import static org.junit.Assert.*;
 
-import org.hamcrest.core.Is;
 import org.junit.Test;
 import org.junit.Before;
 

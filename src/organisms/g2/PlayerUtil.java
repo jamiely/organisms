@@ -9,6 +9,10 @@ public class PlayerUtil implements Constants {
 		return directions;
 	}
 	
+	public static Boolean isValidDirection(int direction) {
+		return direction >= STAYPUT && direction <= SOUTH;
+	}
+	
 	public static Integer getRandomCardinalDirection(Random rand) {
 		return randomArrayElement(getCardinalDirections(), rand);
 	}
