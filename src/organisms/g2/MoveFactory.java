@@ -18,6 +18,9 @@ public class MoveFactory implements Constants {
 	public Move stayPutMove() {
 		return new Move(STAYPUT);
 	}
+	public Move reproductionMove(int direction, int state) {
+		return new Move(REPRODUCE, direction, state);
+	}
 	public Move randomMoveAwayFromNeighbors(MoveInput input) {
 		ArrayList<Integer> directions = new ArrayList<Integer>();
 		for(int i = 1, size = input.getNeighbors().length; i < size; i++) {

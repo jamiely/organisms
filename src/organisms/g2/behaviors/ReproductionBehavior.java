@@ -9,8 +9,6 @@ public class ReproductionBehavior extends BehaviorBase {
 	private double energyToReporduce = .85;
 	private int gestationPeriod = 10;
 	
-	
-	
 	public ReproductionBehavior(PlayerBase player) {
 		super(player);
 	}
@@ -54,7 +52,7 @@ public class ReproductionBehavior extends BehaviorBase {
 	protected Move reproduceTowardsFood(MoveInput input) {
 		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
 			if(!shouldMoveToLocation(i, input)) continue;
-			return getPlayer().createReproductionMove(i, giveMessageToChild());
+			return reproductionMove(i);
 		}
 		
 		
@@ -74,7 +72,10 @@ public class ReproductionBehavior extends BehaviorBase {
 		while (!shouldMoveToLocation(direction, input)){
 			direction = PlayerUtil.getRandomCardinalDirection(getPlayer().getRand());
 		}
-		return getPlayer().createReproductionMove(direction, giveMessageToChild());
+		return reproductionMove(direction);
 	}
 	
+	protected Move reproductionMove(int direction) {
+		return getMoveFactory().reproductionMove(direction, giveMessageToChild());
+	}
 }

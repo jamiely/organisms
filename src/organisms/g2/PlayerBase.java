@@ -53,9 +53,6 @@ public abstract class PlayerBase implements Player {
 
 		MoveInput input = MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft);
 		getMemory().rememberInfo(input);
-
-		getMemory().rememberNeighbors(neighbors);
-		getMemory().rememberFood(foodpresent);
 		getMemory().setAge(getMemory().getAge() + 1);
 		
 		Move move = move(input);
