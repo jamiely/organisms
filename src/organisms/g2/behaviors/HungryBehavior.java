@@ -30,7 +30,7 @@ public class HungryBehavior extends BehaviorBase {
 	}
 	
 	protected boolean hasAlotOfEnergy(MoveInput input) {
-		return input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
+		return input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 5;
 	}
 	
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {

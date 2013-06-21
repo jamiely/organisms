@@ -84,6 +84,27 @@ public class Memory implements Constants {
 		return moves.peek();
 	}
 	
+	public int getLastNonStayDirection(){
+		if(moves.empty()){
+			return SOUTH;
+		}
+		if(moves.peek() != STAYPUT){
+			return moves.peek();
+		}
+		Stack<Integer> history = new Stack<Integer>();
+		while(!moves.empty() && moves.peek() == STAYPUT){
+			history.push(moves.pop());
+		}
+		if(moves.empty()){
+			return SOUTH;
+		}
+		int lastNonStayDirection = moves.peek();
+		while(!history.empty()){
+			moves.push(history.pop());
+		}
+		return lastNonStayDirection;
+	}
+	
 	public Boolean hasLastDirection() {
 		return !moves.empty();
 	}
@@ -205,6 +226,14 @@ public class Memory implements Constants {
 		this.offspringCount = offspringCount;
 		
 	}
+	
+	/**
+	 * @param offspringCount2
+	 */
+	public void increaseOffspringCount() {
+		this.offspringCount += 1;
+		
+	}
 
 	/**
 	 * @return
@@ -218,6 +247,13 @@ public class Memory implements Constants {
 	 */
 	public void setAgeAtWhichWeHadLastChild(Integer ageAtWhichWeHadLastChild) {
 		this.ageAtWhichWeHadLastChild = ageAtWhichWeHadLastChild;
+	}
+	
+	/**
+	 * @param ageAtWhichWeHadLastChild2
+	 */
+	public void updateAgeAtWhichWeHadLastChild() {
+		this.ageAtWhichWeHadLastChild = age;
 	}
 
 }

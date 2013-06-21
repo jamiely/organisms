@@ -17,14 +17,23 @@ public class ExploreBehavior extends BehaviorBase {
 		return new Move(getNextMoveDirection());
 	}
 	
+	/**
+	 * goes a random direction with 5/10 probability and reverses in 1/10. 
+	 * @return
+	 */
 	protected int getNextMoveDirection() {
-		int lastDirection = WEST;
-		if(getMemory().hasLastDirection() && getMemory().getLastDirection() != STAYPUT) {
-			lastDirection = getMemory().getLastDirection();
+		int lastDirection = getMemory().getLastNonStayDirection();
+		
+		if(getPlayer().nOutOfMTimes(5, 10)) {
+			int newDirection = PlayerUtil.getRandomCardinalDirection(getPlayer().getRand());
+			while (lastDirection == newDirection){
+				newDirection = PlayerUtil.getRandomCardinalDirection(getPlayer().getRand());
+			}
 		}
-		if(getPlayer().nOutOfMTimes(2, 10)) {
+		if(getPlayer().nOutOfMTimes(1, 10)) {
 			lastDirection = PlayerUtil.oppositeDirection(lastDirection);
 		}
+		
 		return lastDirection;
 	}
 	
@@ -33,6 +42,9 @@ public class ExploreBehavior extends BehaviorBase {
 	}
 	
 	protected Boolean itIsBetterToStayPut() {
+		if(getPlayer().nOutOfMTimes(7, 10)) {
+			return true;
+		} 
 		return false;
 	}
 }

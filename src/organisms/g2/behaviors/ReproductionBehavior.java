@@ -17,15 +17,16 @@ public class ReproductionBehavior extends BehaviorBase {
 	@Override
 	public Move move(MoveInput input) {
 		if(shouldReproduce(input)){
+			getMemory().updateAgeAtWhichWeHadLastChild();
 			return reproduceTowardsFood(input);
 		}
 		return null;
 	}
 	
 	protected boolean shouldReproduce(MoveInput input){
-		if(nStepsHavePassedSinceWeLastHadChild(gestationPeriod)){
-			return false;
-		}
+//		if(nStepsHavePassedSinceWeLastHadChild(gestationPeriod)){
+//			return false;
+//		}
 		if (getPlayer().nOutOfMTimes(1, 3)){
 			return false;
 		}
@@ -40,7 +41,7 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	
 	protected int getStepsSinceWeHadLastChild() {
-		return getPlayer().memory.getAge() - getPlayer().memory.getAgeAtWhichWeHadLastChild();
+		return getMemory().getAge() - getMemory().getAgeAtWhichWeHadLastChild();
 	}
 
 	protected boolean weHaveReproductionEnergyAndArentCrowded(MoveInput input) {
@@ -65,6 +66,10 @@ public class ReproductionBehavior extends BehaviorBase {
 		return input.isFoodPresentAt(i) && !input.isNeighborAt(i);
 	}
 	
+	protected boolean okToMoveToLocation(int i, MoveInput input) {
+		return !input.isNeighborAt(i);
+	}
+	
 	protected int getFoodDirection() {
 		// TODO using memory
 		return 0;
@@ -80,7 +85,7 @@ public class ReproductionBehavior extends BehaviorBase {
 	
 	protected Move randomReproduce(MoveInput input) {
 		int direction = PlayerUtil.getRandomCardinalDirection(getPlayer().getRand());
-		while (!shouldMoveToLocation(direction, input)){
+		while (!okToMoveToLocation(direction, input)){
 			direction = PlayerUtil.getRandomCardinalDirection(getPlayer().getRand());
 		}
 		return reproductionMove(direction);
