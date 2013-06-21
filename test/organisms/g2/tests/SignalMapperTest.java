@@ -7,6 +7,7 @@ import org.junit.Before;
 import organisms.Constants;
 import organisms.g2.DirectionProvider;
 import organisms.g2.signals.FoodIsInDirection;
+import organisms.g2.signals.SignalBase;
 import organisms.g2.signals.SignalMapper;
 
 
@@ -49,6 +50,13 @@ public class SignalMapperTest implements Constants {
 	@Test
 	public void testDirectionExtractionWest() {
 		assertEquals("Direction is correct", WEST, (int)mapper.directionForDirectionProviderState(getTestState(WEST)));
+	}
+	
+	@Test
+	public void testReconstructSignalFromState() {
+		SignalBase signal = mapper.getSignalForState(getTestState(SOUTH));
+		assertEquals("Signal has correct class", FoodIsInDirection.class, signal.getClass());
+		assertEquals("Signal has correct direction", SOUTH, (int)((FoodIsInDirection) signal).getDirection());
 	}
 
 }
