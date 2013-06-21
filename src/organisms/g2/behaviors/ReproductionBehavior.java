@@ -16,13 +16,23 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	@Override
 	public Move move(MoveInput input) {
+		if(!spaceAround(input)){
+			return null;
+		}
 		if(shouldReproduce(input)){
 			getMemory().updateAgeAtWhichWeHadLastChild();
 			return reproduceTowardsFood(input);
 		}
 		return null;
 	}
-	
+
+	private boolean spaceAround(MoveInput input) {
+		Integer[] neighbors = input.getNeighbors();
+		for(int i = 1, size = neighbors.length; i < size; i ++) {
+			if(neighbors[i] == -1) return true;
+		}
+		return false;
+	}
 	protected boolean shouldReproduce(MoveInput input){
 //		if(nStepsHavePassedSinceWeLastHadChild(gestationPeriod)){
 //			return false;
