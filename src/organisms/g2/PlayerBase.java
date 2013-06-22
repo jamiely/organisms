@@ -162,10 +162,6 @@ public abstract class PlayerBase implements Player {
 	public Double factorOfMaximumEnergyPerOrganism(Double factor) {
 		return getMaximumEnergyPerOrganismM() * factor;
 	}
-
-	public boolean weHaveFewNeighbors(MoveInput input) {
-		return Stats.neighborCount(input.getNeighbors()) < 1;
-	}
 	
 	public Integer getMaximumEnergyPerOrganismM() {
 		return getGame().M();
