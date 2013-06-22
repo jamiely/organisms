@@ -8,6 +8,10 @@ public class Point {
    public static Point subtract(Point a, Point b) {
       return new Point(a.x - b.x, a.y - b.y);
    }
+   
+   public static Point origin() {
+	   return new Point(0, 0);
+   }
 
    public int x;
    public int y;
@@ -15,6 +19,15 @@ public class Point {
    public Point(int x, int y) {
       this.x = x;
       this.y = y;
+   }
+   
+   public Point(Point p) {
+	   this(p.x, p.y);
+   }
+   
+   public void add(Point p) {
+	   this.x += p.x;
+	   this.y += p.y;
    }
 
    @Override

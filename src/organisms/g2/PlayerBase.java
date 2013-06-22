@@ -7,7 +7,6 @@ import organisms.Move;
 import organisms.OrganismsGame;
 import organisms.Player;
 import organisms.g2.data.MoveInput;
-import organisms.g2.stats.Stats;
 
 public abstract class PlayerBase implements Player {
 	private static final long serialVersionUID = -2855747689179359665L;
@@ -161,10 +160,6 @@ public abstract class PlayerBase implements Player {
 		
 	public Double factorOfMaximumEnergyPerOrganism(Double factor) {
 		return getMaximumEnergyPerOrganismM() * factor;
-	}
-
-	public boolean weHaveFewNeighbors(MoveInput input) {
-		return Stats.neighborCount(input.getNeighbors()) < 1;
 	}
 	
 	public Integer getMaximumEnergyPerOrganismM() {

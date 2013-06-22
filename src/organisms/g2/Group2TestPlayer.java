@@ -2,11 +2,11 @@ package organisms.g2;
 
 import java.awt.Color;
 
-import organisms.*;
+import organisms.OrganismsGame;
 import organisms.g2.behaviors.CoordinatorFactory;
 
-public final class G2Basic extends CoordinatedPlayerBase {
-	private static final long serialVersionUID = -3612443241236355755L;
+public class Group2TestPlayer extends CoordinatedPlayerBase {
+	private static final long serialVersionUID = -5381547021566768269L;
 	
 	/*
 	 * This method is called when the Organism is created.
@@ -15,9 +15,8 @@ public final class G2Basic extends CoordinatedPlayerBase {
 	public void register(OrganismsGame game, int key) throws Exception
 	{
 		super.register(game, key);
-		setName("G2Basic");
-		setColor(Color.GREEN);
-		setCoordinator(CoordinatorFactory.hungryReproduceExploreCoordinator(this));
+		setName("Group 2 Test Player");
+		setColor(Color.YELLOW);
+		setCoordinator(CoordinatorFactory.waypointCoordinator(this));
 	}
-
 }

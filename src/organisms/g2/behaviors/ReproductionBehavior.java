@@ -6,10 +6,11 @@ import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
 import organisms.g2.signals.FoodIsInDirection;
 import organisms.g2.signals.SignalMapper;
+import organisms.g2.stats.Stats;
 
 public class ReproductionBehavior extends BehaviorBase {
 	private double energyToReporduce = .85;
-	private int gestationPeriod = 10;
+	//private int gestationPeriod = 10;
 	
 	public ReproductionBehavior(PlayerBase player) {
 		super(player);
@@ -44,7 +45,11 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 
 	protected boolean weHaveReproductionEnergyAndArentCrowded(MoveInput input) {
-		return weHaveEnoughEnergyToReproduce(input) && getPlayer().weHaveFewNeighbors(input);
+		return weHaveEnoughEnergyToReproduce(input) && weHaveFewNeighbors(input);
+	}
+	
+	public boolean weHaveFewNeighbors(MoveInput input) {
+		return Stats.neighborCount(input.getNeighbors()) < 1;
 	}
 
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
