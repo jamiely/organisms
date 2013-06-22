@@ -12,6 +12,13 @@ public class PointUtil implements Constants {
 		new Point(0, 1),
 		new Point(0, -1)
 	};
+	private static Point[] oppositeOffsetsForDirections = new Point[]{
+		new Point(0, 0),
+		new Point(1, 0),
+		new Point(-1, 0),
+		new Point(0, -1),
+		new Point(0, 1)
+	};
 	public static ArrayList<Integer> getPossibleDirectionsTowardsPoint(Point destination) {
 		return getPossibleDirectionsTowardsPoint(destination, Point.origin());
 	}
@@ -36,6 +43,18 @@ public class PointUtil implements Constants {
 		return getPointOffsetsForDirections()[direction];
 	}
 	public static Point pointOffsetInDirection(Point p, int direction) {
+		return Point.add(p, getPointOffsetForDirection(direction));
+	}
+	
+	public static Point[] getPointOppositeOffsetsForDirections() {
+		return oppositeOffsetsForDirections;
+	}
+	
+	public static Point getPointOppositeOffsetForDirection(int direction) {
+		return getPointOffsetsForDirections()[direction];
+	}
+	
+	public static Point pointOppositeOffsetInDirection(Point p, int direction) {
 		return Point.add(p, getPointOffsetForDirection(direction));
 	}
 }

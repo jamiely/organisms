@@ -11,6 +11,17 @@ public class PlayerUtil implements Constants {
 		return directions;
 	}
 	
+	public static Boolean isCardinalDirection(Integer direction) {
+		switch(direction) {
+		case WEST:
+		case EAST:
+		case SOUTH:
+		case NORTH:
+			return true;
+		}
+		return false;
+	}
+	
 	public static Boolean isValidDirection(int direction) {
 		return direction >= STAYPUT && direction <= SOUTH;
 	}

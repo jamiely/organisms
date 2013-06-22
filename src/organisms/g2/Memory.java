@@ -59,8 +59,16 @@ public class Memory implements Constants {
 	}
 	
 	public void updateLocation(Move move) {
-		moves.add(move.type());
-		location.add(PointUtil.getPointOffsetForDirection(move.type()));
+		int direction = move.type();
+		moves.add(direction);
+		
+		if(!PlayerUtil.isCardinalDirection(direction)) return;
+		
+		location.add(PointUtil.getPointOffsetForDirection(direction));
+		// update all locations so that they are relative to where we are now
+		for(Point foodLocation: getFoodLocations()) {
+			foodLocation.add(PointUtil.getPointOppositeOffsetForDirection(direction));
+		}
 	}
 	
 	public int getLastDirection(){
@@ -77,6 +85,9 @@ public class Memory implements Constants {
 		Stack<Integer> history = new Stack<Integer>();
 		while(!moves.empty() && moves.peek() == STAYPUT){
 			history.push(moves.pop());
+		}
+		if(moves.empty()){
+			return SOUTH;
 		}
 		int lastNonStayDirection = moves.peek();
 		while(!history.empty()){
@@ -118,6 +129,11 @@ public class Memory implements Constants {
     		getFoodLocations().remove(foodLocation);
     	} 
     	getFoodLocations().add(foodLocation);
+    	
+    	// only store the last 10 locations of food
+    	while(getFoodLocations().size() > 10) {
+    		getFoodLocations().remove(0);
+    	}
 	}
 	
 	

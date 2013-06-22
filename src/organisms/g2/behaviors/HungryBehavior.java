@@ -15,12 +15,12 @@ public class HungryBehavior extends BehaviorBase {
 	}
 	@Override
 	public Move move(MoveInput input) {
-		//if(!iAmHungry(input)) return null;
+		if(!iAmHungry(input)) return null;
 		
-//		if(input.getFoodLeft() > 2) {
-//			return getMoveFactory().stayPutMove();
-//		}
-//		
+		if(input.getFoodLeft() > 2) {
+			return getMoveFactory().stayPutMove();
+		}
+		
 		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
 			if(!shouldMoveToLocation(i, input)) continue;
 	

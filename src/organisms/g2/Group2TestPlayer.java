@@ -17,6 +17,6 @@ public class Group2TestPlayer extends CoordinatedPlayerBase {
 		super.register(game, key);
 		setName("Group 2 Test Player");
 		setColor(Color.YELLOW);
-		setCoordinator(CoordinatorFactory.hungryWaypointCoordinator(this));
+		setCoordinator(CoordinatorFactory.hungryReproduceWaypointCoordinator(this));
 	}
 }
