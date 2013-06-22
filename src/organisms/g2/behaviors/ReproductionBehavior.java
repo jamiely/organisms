@@ -16,23 +16,12 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	@Override
 	public Move move(MoveInput input) {
-		if(!spaceAround(input)){
-			return null;
-		}
-		if(shouldReproduce(input)){
-			getMemory().updateAgeAtWhichWeHadLastChild();
-			return reproduceTowardsFood(input);
-		}
-		return null;
+		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
+		if(!shouldReproduce(input)) return null;
+		
+		return reproduceTowardsFood(input);
 	}
 
-	private boolean spaceAround(MoveInput input) {
-		Integer[] neighbors = input.getNeighbors();
-		for(int i = 1, size = neighbors.length; i < size; i ++) {
-			if(neighbors[i] == -1) return true;
-		}
-		return false;
-	}
 	protected boolean shouldReproduce(MoveInput input){
 //		if(nStepsHavePassedSinceWeLastHadChild(gestationPeriod)){
 //			return false;
@@ -51,7 +40,7 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	
 	protected int getStepsSinceWeHadLastChild() {
-		return getMemory().getAge() - getMemory().getAgeAtWhichWeHadLastChild();
+		return getMemory().getStepsSinceWeHadLastChild();
 	}
 
 	protected boolean weHaveReproductionEnergyAndArentCrowded(MoveInput input) {
@@ -67,7 +56,6 @@ public class ReproductionBehavior extends BehaviorBase {
 			if(!shouldMoveToLocation(i, input)) continue;
 			return reproductionMove(i);
 		}
-		
 		
 		return randomReproduce(input);
 	}
@@ -94,10 +82,11 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	
 	protected Move randomReproduce(MoveInput input) {
-		int direction = PlayerUtil.getRandomCardinalDirection(getPlayer().getRand());
-		while (!okToMoveToLocation(direction, input)){
+		int direction;
+		do{
 			direction = PlayerUtil.getRandomCardinalDirection(getPlayer().getRand());
-		}
+		}while (!okToMoveToLocation(direction, input));
+		
 		return reproductionMove(direction);
 	}
 	

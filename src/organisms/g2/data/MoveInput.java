@@ -22,6 +22,10 @@ public class MoveInput {
 		return getNeighborStateAt(direction) != STATE_FOR_NO_NEIGHBOR;
 	}
 	
+	public Boolean noNeighborAt(int direction) {
+		return !isNeighborAt(direction);
+	}
+	
 	public Boolean[] getFoodPresent() {
 		return foodPresent;
 	}

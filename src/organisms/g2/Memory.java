@@ -249,11 +249,7 @@ public class Memory implements Constants {
 		this.ageAtWhichWeHadLastChild = ageAtWhichWeHadLastChild;
 	}
 	
-	/**
-	 * @param ageAtWhichWeHadLastChild2
-	 */
-	public void updateAgeAtWhichWeHadLastChild() {
-		this.ageAtWhichWeHadLastChild = age;
+	public Integer getStepsSinceWeHadLastChild() {
+		return getAge() - getAgeAtWhichWeHadLastChild();
 	}
-
 }

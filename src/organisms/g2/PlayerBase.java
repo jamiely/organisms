@@ -53,13 +53,13 @@ public abstract class PlayerBase implements Player {
 
 		MoveInput input = MoveInput.createMoveInput(foodpresent, neighbors, foodleft, energyleft);
 		getMemory().rememberInfo(input);
-		getMemory().setAge(getMemory().getAge() + 1);
 		
 		Move move = move(input);
 		getMemory().updateLocation(move);
 		if(move.type() == REPRODUCE) {
 			birth();
 		}
+		
 		setAge(getAge() + 1);
 		
 		return move;
