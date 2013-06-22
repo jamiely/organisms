@@ -10,7 +10,7 @@ import organisms.g2.stats.Stats;
 
 public class ReproductionBehavior extends BehaviorBase {
 	private double energyToReporduce = .85;
-	private int gestationPeriod = 10;
+	//private int gestationPeriod = 10;
 	
 	public ReproductionBehavior(PlayerBase player) {
 		super(player);
