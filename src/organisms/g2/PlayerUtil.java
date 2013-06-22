@@ -1,5 +1,6 @@
 package organisms.g2;
 
+import java.util.ArrayList;
 import java.util.Random;
 import organisms.Constants;
 import organisms.g2.data.MoveInput;
@@ -55,5 +56,26 @@ public class PlayerUtil implements Constants {
 	
 	public static Boolean noEmptyNeighboringSpaces(MoveInput input) {
 		return !atLeastOneEmptyNeighboringSpace(input);
+	}
+	
+	public static Integer directionForMoveGivenPossibleDirections(
+			MoveInput input, ArrayList<Integer> directions) {
+		
+		// are any of the given directions available?
+		for(Integer dir: directions) {
+			if(input.noNeighborAt(dir)) return dir;
+		}
+		
+		// otherwise, try to move in a way that isn't counter to 
+		Boolean[] moveInDirection = new Boolean[]{false, true, true, true, true};
+		for(Integer dir: directions) {
+			moveInDirection[dir] = false;
+			moveInDirection[PlayerUtil.oppositeDirection(dir)] = false;
+		}
+		for(int i = 0; i < moveInDirection.length; i++) {
+			if(moveInDirection[i]) return i;
+		}
+		
+		return -1;
 	}
 }

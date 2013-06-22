@@ -4,19 +4,13 @@ import java.util.ArrayList;
 
 import organisms.Constants;
 import organisms.g2.data.Point;
+import organisms.g2.data.PointUtil;
 
 public class Waypoint implements Constants {
 	private Point destination;
 	// Where someone is relative to 
 	private Point offset;
 	// STAYPUT, WEST, EAST, NORTH, SOUTH
-	private static Point[] offsetsForDirections = new Point[]{
-		new Point(0, 0),
-		new Point(-1, 0),
-		new Point(1, 0),
-		new Point(0, 1),
-		new Point(0, -1)
-	};
 	
 	public Waypoint(Point destination) {
 		setDestination(destination);
@@ -35,20 +29,10 @@ public class Waypoint implements Constants {
 		this.offset = offset;
 	}
 	public ArrayList<Integer> getPossibleMovesTowardsWaypoint() {
-		ArrayList<Integer> directions = new ArrayList<Integer>();
-		
-		Point delta = Point.subtract(getDestination(), getOffset());
-		if(delta.x != 0) {
-			directions.add(delta.x < 0 ? WEST : EAST);
-		}
-		if(delta.y != 0) {
-			directions.add(delta.y < 0 ? SOUTH : NORTH);
-		}
-		
-		return directions;
+		return PointUtil.getPossibleDirectionsTowardsPoint(getDestination(), getOffset());
 	}
 	public void moveInDirection(int direction) {
-		Point moveOffset = offsetsForDirections[direction];
+		Point moveOffset = PointUtil.getPointOffsetForDirection(direction);
 		if(moveOffset == null) return;
 		
 		getOffset().add(moveOffset);

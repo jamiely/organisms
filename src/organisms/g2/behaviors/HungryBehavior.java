@@ -1,8 +1,13 @@
 package organisms.g2.behaviors;
 
+import java.util.ArrayList;
+
 import organisms.Move;
 import organisms.g2.PlayerBase;
+import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
+import organisms.g2.data.Point;
+import organisms.g2.data.PointUtil;
 
 public class HungryBehavior extends BehaviorBase {
 	public HungryBehavior(PlayerBase player) {
@@ -10,19 +15,34 @@ public class HungryBehavior extends BehaviorBase {
 	}
 	@Override
 	public Move move(MoveInput input) {
-		if(!iAmHungry(input)) return null;
+		//if(!iAmHungry(input)) return null;
 		
-		if(input.getFoodLeft() > 2) {
-			return getMoveFactory().stayPutMove();
-		}
-		
+//		if(input.getFoodLeft() > 2) {
+//			return getMoveFactory().stayPutMove();
+//		}
+//		
 		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
 			if(!shouldMoveToLocation(i, input)) continue;
 	
 			return new Move(i);
 		}
 		
-		return null;
+		return getMoveTowardsMostRecentlySeenFood(input);
+	}
+	
+	protected Move getMoveTowardsMostRecentlySeenFood(MoveInput input) {
+		int direction = getDirectionTowardsMostRecentlySeenFood(input);
+		if(direction == -1) return null;
+		
+		return new Move(direction);
+	}
+	
+	protected Integer getDirectionTowardsMostRecentlySeenFood(MoveInput input) {
+		Point p = getMemory().getMostRecentlySeenFoodLocation();
+		if(p == null) return -1;
+		
+		ArrayList<Integer> directions = PointUtil.getPossibleDirectionsTowardsPoint(p);
+		return PlayerUtil.directionForMoveGivenPossibleDirections(input, directions);
 	}
 	
 	protected Boolean iAmHungry(MoveInput input) {
