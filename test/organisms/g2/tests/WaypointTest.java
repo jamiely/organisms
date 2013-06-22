@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import organisms.Constants;
 import organisms.g2.data.Point;
-import organisms.g2.data.Waypoint;
+import organisms.g2.waypoints.Waypoint;
 
 public class WaypointTest implements Constants {
 

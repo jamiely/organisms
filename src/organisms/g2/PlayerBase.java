@@ -7,7 +7,6 @@ import organisms.Move;
 import organisms.OrganismsGame;
 import organisms.Player;
 import organisms.g2.data.MoveInput;
-import organisms.g2.stats.Stats;
 
 public abstract class PlayerBase implements Player {
 	private static final long serialVersionUID = -2855747689179359665L;

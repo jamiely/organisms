@@ -34,6 +34,5 @@ public class BehaviorCoordinator implements MoveProvider {
 			if(move != null) return move;
 		}
 		return null;
-	}
-	
+	}	
 }

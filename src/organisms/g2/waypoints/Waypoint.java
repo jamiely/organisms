@@ -1,8 +1,9 @@
-package organisms.g2.data;
+package organisms.g2.waypoints;
 
 import java.util.ArrayList;
 
 import organisms.Constants;
+import organisms.g2.data.Point;
 
 public class Waypoint implements Constants {
 	private Point destination;
@@ -19,7 +20,7 @@ public class Waypoint implements Constants {
 	
 	public Waypoint(Point destination) {
 		setDestination(destination);
-		setOffset(Point.origin());
+		resetOffset();
 	}
 	public Point getDestination() {
 		return destination;
@@ -54,5 +55,11 @@ public class Waypoint implements Constants {
 	}
 	public Integer taxicabDistance() {
 		return getOffset().getTaxiCabDistance(getDestination());
+	}
+	public Boolean waypointHasBeenReached() {
+		return getDestination().equals(getOffset());
+	}
+	public void resetOffset() {
+		setOffset(Point.origin());
 	}
 }
