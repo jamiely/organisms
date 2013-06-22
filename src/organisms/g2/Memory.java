@@ -11,6 +11,7 @@ import organisms.Move;
 import organisms.Constants;
 import organisms.g2.data.MoveInput;
 import organisms.g2.data.Point;
+import organisms.g2.data.PointUtil;
 
 /**
  * @author Anne
@@ -29,7 +30,7 @@ public class Memory implements Constants {
 
 	public Memory(){
 		location = new Point(0, 0);
-		foodLocations = new ArrayList<Point> ();
+		setFoodLocations(new ArrayList<Point> ());
 		
 		age = 0;
 		ageAtWhichWeHadLastChild = 0;
@@ -43,10 +44,9 @@ public class Memory implements Constants {
 	}
 	
 	private void initiateMap(){
-		neighbors.put(1,0);
-		neighbors.put(2,0);
-		neighbors.put(3,0);
-		neighbors.put(4,0);
+		for(int direction: PlayerUtil.getCardinalDirections()) {
+			neighbors.put(direction, 0);
+		}
 	}
 	
 	public void increaseAge(){
@@ -59,25 +59,16 @@ public class Memory implements Constants {
 	}
 	
 	public void updateLocation(Move move) {
-		moves.add(move.type());
-		switch(move.type())
-	    {
-		    case STAYPUT:
-			    return;
-		    case WEST:
-		    	location.x -=1;
-			    return;
-		    case EAST:
-		    	location.x +=1;
-		    	return;
-		    case NORTH:
-		    	location.y -=1;
-		    	return;
-		    case SOUTH:
-		    	location.y +=1;
-		    	return;
-	    }
-	    return;
+		int direction = move.type();
+		moves.add(direction);
+		
+		if(!PlayerUtil.isCardinalDirection(direction)) return;
+		
+		location.add(PointUtil.getPointOffsetForDirection(direction));
+		// update all locations so that they are relative to where we are now
+		for(Point foodLocation: getFoodLocations()) {
+			foodLocation.add(PointUtil.getPointOppositeOffsetForDirection(direction));
+		}
 	}
 	
 	public int getLastDirection(){
@@ -118,44 +109,31 @@ public class Memory implements Constants {
 		for(int i = 1, size = foodpresent.length; i < size; i++) {
 			if(foodpresent[i]){
 				addFood(i);
+			} else {
+				removeFood(i);
 			}
 		}
 	}
 	
+	public void removeFood(int i) {
+		Point foodLocation = PointUtil.pointOffsetInDirection(location, i);
+		getFoodLocations().remove(foodLocation);
+	}
+	
 	public void addFood(int i){
-		Point foodLocation = location;
-		switch(i)
-		 {
-		    case STAYPUT:
-		    	if (!foodLocations.contains(foodLocation)){
-		    		foodLocations.add(foodLocation);
-		    	}
-			    return;
-		    case WEST:
-		    	foodLocation.x -=1;
-		    	if (!foodLocations.contains(foodLocation)){
-		    		foodLocations.add(foodLocation);
-		    	}
-			    return;
-		    case EAST:
-		    	foodLocation.x +=1;
-		    	if (!foodLocations.contains(foodLocation)){
-		    		foodLocations.add(foodLocation);
-		    	}
-		    	return;
-		    case NORTH:
-		    	foodLocation.y -=1;
-		    	if (!foodLocations.contains(foodLocation)){
-		    		foodLocations.add(foodLocation);
-		    	}
-		    	return;
-		    case SOUTH:
-		    	foodLocation.y +=1;
-		    	if (!foodLocations.contains(foodLocation)){
-		    		foodLocations.add(foodLocation);
-		    	}
-		    	return;
-	    }
+		Point foodLocation = PointUtil.pointOffsetInDirection(location, i);
+				
+		if (getFoodLocations().contains(foodLocation)){
+    		// remove it so that we can add it to the end, we'll 
+			// assume that items on the end are more recent
+    		getFoodLocations().remove(foodLocation);
+    	} 
+    	getFoodLocations().add(foodLocation);
+    	
+    	// only store the last 10 locations of food
+    	while(getFoodLocations().size() > 10) {
+    		getFoodLocations().remove(0);
+    	}
 	}
 	
 	
@@ -163,18 +141,16 @@ public class Memory implements Constants {
 		switch(i)
 		 {
 		    case WEST:
-		    	neighbors.put(WEST, neighbors.get(WEST)+1);
-			    return;
 		    case EAST:
-		    	neighbors.put(EAST, neighbors.get(EAST)+1);
-			    return;
 		    case NORTH:
-		    	neighbors.put(NORTH, neighbors.get(NORTH)+1);
-			    return;
 		    case SOUTH:
-		    	neighbors.put(SOUTH, neighbors.get(SOUTH)+1);
-			    return;
+		    	incrementNeighborAtDirection(i);
+		    	break;
 	    }
+	}
+	
+	protected void incrementNeighborAtDirection(int direction) {
+		neighbors.put(direction, neighbors.get(direction)+1);
 	}
 	
 	public void rememberNeighbors(Integer[] neighbors){
@@ -189,67 +165,55 @@ public class Memory implements Constants {
 		switch(move.type())
 		 {
 		    case WEST:
-		    	return neighbors.get(WEST);
 		    case EAST:
-		    	return neighbors.get(EAST);
 		    case NORTH:
-		    	return neighbors.get(NORTH);
 		    case SOUTH:
-		    	return neighbors.get(SOUTH);
+		    	return neighbors.get(move.type());
 	    }
 		return 0;
 	}
 	
-	public Move getClosetFood(){
-		//TODO
-		return null;
+	public Point getMostRecentlySeenFoodLocation(){
+	 	if(getFoodLocations().isEmpty()) return null;
+	 	
+	 	return getFoodLocations().get(getFoodLocations().size()-1);
 	}
 
-	/**
-	 * @param age2
-	 */
 	public void setAge(int age) {
 		this.age = age;
 	}
 
-	/**
-	 * @return
-	 */
 	public Integer getOffspringCount() {
 		return offspringCount;
 	}
 
-	/**
-	 * @param offspringCount2
-	 */
 	public void setOffspringCount(Integer offspringCount) {
 		this.offspringCount = offspringCount;
 		
 	}
 	
-	/**
-	 * @param offspringCount2
-	 */
 	public void increaseOffspringCount() {
 		this.offspringCount += 1;
 		
 	}
 
-	/**
-	 * @return
-	 */
 	public Integer getAgeAtWhichWeHadLastChild() {
 		return ageAtWhichWeHadLastChild;
 	}
 
-	/**
-	 * @param ageAtWhichWeHadLastChild2
-	 */
 	public void setAgeAtWhichWeHadLastChild(Integer ageAtWhichWeHadLastChild) {
 		this.ageAtWhichWeHadLastChild = ageAtWhichWeHadLastChild;
 	}
 	
 	public Integer getStepsSinceWeHadLastChild() {
 		return getAge() - getAgeAtWhichWeHadLastChild();
+	}
+
+	public ArrayList<Point> getFoodLocations() {
+		return foodLocations;
+	}
+
+	public void setFoodLocations(ArrayList<Point> foodLocations) {
+		this.foodLocations = foodLocations;
 	}
 }

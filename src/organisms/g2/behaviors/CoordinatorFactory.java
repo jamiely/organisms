@@ -24,4 +24,11 @@ public class CoordinatorFactory {
 		coordinator.addBehavior(new RandomBehavior(player));
 		return coordinator;
 	}
+	public static BehaviorCoordinator hungryWaypointCoordinator(PlayerBase player) {
+		BehaviorCoordinator coordinator = new BehaviorCoordinator();
+		coordinator.addBehavior(new HungryBehavior(player));
+		coordinator.addBehavior(WaypointBehavior.squareWaypointBehavior(player));
+		coordinator.addBehavior(new RandomBehavior(player));
+		return coordinator;
+	}
 }
