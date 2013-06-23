@@ -9,7 +9,7 @@ import organisms.g2.signals.SignalMapper;
 import organisms.g2.stats.Stats;
 
 public class ReproductionBehavior extends BehaviorBase {
-	private double energyToReporduce = .85;
+	private double factorOfTotalEnergyToReproduce = .85;
 	//private int gestationPeriod = 10;
 	
 	public ReproductionBehavior(PlayerBase player) {
@@ -53,7 +53,7 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
-		return input.getEnergyLeft() > getPlayer().factorOfMaximumEnergyPerOrganism(energyToReporduce);
+		return input.getEnergyLeft() > getPlayer().factorOfMaximumEnergyPerOrganism(factorOfTotalEnergyToReproduce);
 	}
 	
 	protected Move reproduceTowardsFood(MoveInput input) {
