@@ -15,15 +15,18 @@ public class CompetionExploreBehavior extends ExploreBehavior {
 	
 	@Override
 	public Move move(MoveInput input) {
+		Integer foodDir = foodDirection(input);
+		if(foodDir != null) return new Move(foodDir);
+		
 		if(weHaveStayedTooMuch())  {
 			Integer direction = randomDirectionOfEmptySpace(input);
 			if(direction != null) return new Move(direction);
 		}
-		
 		if(itIsBetterToStayPut(input)) return getMoveFactory().stayPutMove();
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return getMoveFactory().stayPutMove();
 		
-		if(getPlayer().nOutOfMTimes(2, 10)) return new Move(EAST);
+		if(getPlayer().nOutOfMTimes(4, 5)) return getMoveFactory().stayPutMove();
+		if(getPlayer().nOutOfMTimes(1, 5)) return new Move(EAST);
 		
 		return new Move(NORTH);
 		
@@ -32,13 +35,21 @@ public class CompetionExploreBehavior extends ExploreBehavior {
 //				getPlayer().getRand(), lastDirection));	
 	}
 	
+	protected Integer foodDirection(MoveInput input) {
+		if(input.isFoodPresentAt(NORTH)) return NORTH;
+		for(Integer dir: PlayerUtil.getCardinalDirections()) {
+			if(input.isFoodPresentAt(dir)) return dir;
+		}
+		return null;
+	}
+	
 	protected Integer randomDirectionOfEmptySpace(MoveInput input) {
 		ArrayList<Integer> directions = PlayerUtil.getDirectionsOfEmptySpaces(input);
 		return PlayerUtil.randomItem(directions, getPlayer().getRand());
 	}
 	
 	protected Boolean weHaveStayedTooMuch() {
-		return getMemory().getCountOfConsecutiveStayPutMoves() > 3;
+		return getMemory().getCountOfConsecutiveStayPutMoves() > 5;
 	}
 	
 	protected Boolean itIsBetterToStayPut(MoveInput input) {

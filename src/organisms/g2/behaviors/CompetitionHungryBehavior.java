@@ -16,7 +16,8 @@ public class CompetitionHungryBehavior extends HungryBehavior {
 	
 	@Override
 	public Move move(MoveInput input) {
-		if(!iAmHungry(input)) return null;
+		if(input.getEnergyLeft() == getPlayer().getMaximumEnergyPerOrganismM()) return null;
+//		if(!iAmHungry(input)) return null;
 		
 		if(input.getFoodLeft() > 0) {
 			return getMoveFactory().stayPutMove();
@@ -28,13 +29,13 @@ public class CompetitionHungryBehavior extends HungryBehavior {
 			return new Move(i);
 		}
 		
-		Move move = getMoveTowardsMostRecentlySeenFood(input);
-		if(move != null) return move;
-		
-		if(weHaveStayedTooMuch()) {
-			Integer direction = randomDirectionOfEmptySpace(input);
-			if(direction != null) return new Move(direction);  
-		}
+//		Move move = getMoveTowardsMostRecentlySeenFood(input);
+//		if(move != null) return move;
+//		
+//		if(weHaveStayedTooMuch()) {
+//			Integer direction = randomDirectionOfEmptySpace(input);
+//			if(direction != null) return new Move(direction);  
+//		}
 		
 		return null;
 	}
