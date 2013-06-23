@@ -44,13 +44,9 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	}
 
 	protected boolean weHaveReproductionEnergyAndArentCrowded(MoveInput input) {
-		return weHaveEnoughEnergyToReproduce(input) && weHaveFewNeighbors(input);
+		return weHaveEnoughEnergyToReproduce(input) && PlayerUtil.atLeastOneEmptyNeighboringSpace(input);
 	}
 	
-	public boolean weHaveFewNeighbors(MoveInput input) {
-		return Stats.neighborCount(input.getNeighbors()) < 4;
-	}
-
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
 		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.5 &&
 				input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
