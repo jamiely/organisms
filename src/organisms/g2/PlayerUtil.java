@@ -22,6 +22,17 @@ public class PlayerUtil implements Constants {
 		return false;
 	}
 	
+	public static ArrayList<Integer> getDirectionsOfEmptySpaces(MoveInput input) {
+		ArrayList<Integer> directions = new ArrayList<Integer>();
+		for(int i = 1, size = input.getNeighbors().length; i < size; i++) {
+			if(input.isNeighborAt(i)) continue;
+			
+			directions.add(i);
+		}
+		
+		return directions;
+	}
+	
 	public static Boolean isValidDirection(int direction) {
 		return direction >= STAYPUT && direction <= SOUTH;
 	}
@@ -44,6 +55,10 @@ public class PlayerUtil implements Constants {
 	
 	public static Boolean nOutOfMTimes(int n, int m, Random rand) {
 		return n > rand.nextInt(m);
+	}
+	
+	public static <T> T randomItem(ArrayList<T> items, Random rand) {
+		return items.isEmpty() ? null : items.get(rand.nextInt(items.size()));
 	}
 	
 	public static int oppositeDirection(int direction) {

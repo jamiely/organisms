@@ -17,7 +17,11 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
 		if(!shouldReproduce(input)) return null;
 		
-		return reproduceTowardsFood(input);
+		Move move = reproduceTowardsFood(input);
+		if(move != null) return move;
+		
+		if(input.noNeighborAt(NORTH)) return reproductionMove(NORTH);
+		return randomReproduce(input);
 	}
 
 	protected boolean shouldReproduce(MoveInput input){
@@ -44,11 +48,12 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	}
 	
 	public boolean weHaveFewNeighbors(MoveInput input) {
-		return Stats.neighborCount(input.getNeighbors()) < 1;
+		return Stats.neighborCount(input.getNeighbors()) < 4;
 	}
 
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
-		return input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
+		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.5 &&
+				input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
 	}
 	
 	protected Move reproduceTowardsFood(MoveInput input) {
@@ -57,7 +62,7 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 			return reproductionMove(i);
 		}
 		
-		return randomReproduce(input);
+		return null;
 	}
 	
 	protected boolean shouldMoveToLocation(int i, MoveInput input) {
