@@ -15,7 +15,7 @@ public final class G2Basic extends CoordinatedPlayerBase {
 	public void register(OrganismsGame game, int key) throws Exception
 	{
 		super.register(game, key);
-		setName("G2Basic");
+		setName("G2Basic Intraspecies");
 		setColor(Color.GREEN);
 		setCoordinator(CoordinatorFactory.hungryReproduceExploreCoordinator(this));
 	}
