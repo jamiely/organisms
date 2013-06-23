@@ -44,20 +44,4 @@ public class ExploreBehavior extends BehaviorBase {
 	protected Boolean itIsBetterToStayPut() {
 		return getPlayer().nOutOfMTimes(7, 10);
 	}
-	
-//	/*not used as results in worse trial results*/
-//	private int orderedMove(MoveInput input, int lastDirection){
-//		//tries going south, then east, then west, then north, except if any of these are the last direction
-//		//if no direction is avalible, stayput
-//		int[] directions = PlayerUtil.getCardinalDirections();
-//		for(int i = 0, size = directions.length; i < size; i++){
-//			if(lastDirection == PlayerUtil.oppositeDirection(lastDirection)){
-//				continue;
-//			}
-//			if(!input.isNeighborAt(i)){
-//				return i;
-//			}
-//		}
-//		return STAYPUT;
-//	}
 }
