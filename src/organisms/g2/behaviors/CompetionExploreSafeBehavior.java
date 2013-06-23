@@ -7,9 +7,9 @@ import organisms.g2.PlayerBase;
 import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
 
-public class CompetionExploreBehavior extends ExploreBehavior {
+public class CompetionExploreSafeBehavior extends ExploreBehavior {
 
-	public CompetionExploreBehavior(PlayerBase player) {
+	public CompetionExploreSafeBehavior(PlayerBase player) {
 		super(player);
 	}
 	

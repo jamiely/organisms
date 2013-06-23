@@ -4,12 +4,14 @@ import organisms.Move;
 import organisms.g2.PlayerBase;
 import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
-import organisms.g2.stats.Stats;
 
 public class CompetitionReproduceBehavior extends ReproductionBehavior {
-
-	public CompetitionReproduceBehavior(PlayerBase player) {
+	
+	private Integer preferredReproduceDirection;
+	
+	public CompetitionReproduceBehavior(PlayerBase player, int preferredReproduceDirection) {
 		super(player);
+		setPreferredReproduceDirection(preferredReproduceDirection);
 	}
 	
 	@Override
@@ -20,7 +22,9 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 		Move move = reproduceTowardsFood(input);
 		if(move != null) return move;
 		
-		if(input.noNeighborAt(NORTH)) return reproductionMove(NORTH);
+		if(input.noNeighborAt(getPreferredReproduceDirection())) 
+			return reproductionMove(getPreferredReproduceDirection());
+		
 		return randomReproduce(input);
 	}
 
@@ -67,5 +71,14 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	
 	protected boolean okToMoveToLocation(int i, MoveInput input) {
 		return !input.isNeighborAt(i);
+	}
+
+	public Integer getPreferredReproduceDirection() {
+		return preferredReproduceDirection;
+	}
+
+	public void setPreferredReproduceDirection(
+			Integer preferredReproduceDirection) {
+		this.preferredReproduceDirection = preferredReproduceDirection;
 	}
 }
