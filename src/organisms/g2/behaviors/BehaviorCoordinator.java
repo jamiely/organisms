@@ -28,10 +28,12 @@ public class BehaviorCoordinator implements MoveProvider {
 
 	@Override
 	public Move move(MoveInput input) {
-		for(int i = 0, size = behaviors.size(); i < size; i ++) {
-//			System.out.println("Trying behavior" + behaviors.get(i));
-			Move move = behaviors.get(i).move(input);
-			if(move != null) return move;
+		for(BehaviorBase behavior: getBehaviors()) {
+			Move move = behavior.move(input);
+			if(move != null) {
+				System.out.println("Using move from behavior: " + behavior);
+				return move;
+			}
 		}
 		return null;
 	}	
