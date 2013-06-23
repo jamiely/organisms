@@ -27,6 +27,8 @@ public class Memory implements Constants {
 	
 	private HashMap<Integer, Integer> neighbors;
 	private Stack<Integer> moves;
+	
+	private Integer countOfConsecutiveStayPutMoves;
 
 	public Memory(){
 		location = new Point(0, 0);
@@ -41,6 +43,7 @@ public class Memory implements Constants {
 		
 		
 		moves = new Stack<Integer>();
+		setCountOfConsecutiveStayPutMoves(0);
 	}
 	
 	private void initiateMap(){
@@ -58,7 +61,16 @@ public class Memory implements Constants {
 		return age;
 	}
 	
-	public void updateLocation(Move move) {
+	public void rememberMove(Move move) {
+		if(move.type() == STAYPUT) {
+			incrementCountOfConsecutiveStayPutMoves();
+		} else {
+			setCountOfConsecutiveStayPutMoves(0);
+		}
+		updateLocation(move);
+	}
+	
+	protected void updateLocation(Move move) {
 		int direction = move.type();
 		moves.add(direction);
 		
@@ -215,5 +227,18 @@ public class Memory implements Constants {
 
 	public void setFoodLocations(ArrayList<Point> foodLocations) {
 		this.foodLocations = foodLocations;
+	}
+
+	public Integer getCountOfConsecutiveStayPutMoves() {
+		return countOfConsecutiveStayPutMoves;
+	}
+
+	public void setCountOfConsecutiveStayPutMoves(
+			Integer countOfConsecutiveStayPutMoves) {
+		this.countOfConsecutiveStayPutMoves = countOfConsecutiveStayPutMoves;
+	}
+	
+	public void incrementCountOfConsecutiveStayPutMoves() {
+		setCountOfConsecutiveStayPutMoves(getCountOfConsecutiveStayPutMoves()+1);
 	}
 }

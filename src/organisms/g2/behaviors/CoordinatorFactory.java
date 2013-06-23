@@ -31,4 +31,13 @@ public class CoordinatorFactory {
 		coordinator.addBehavior(new RandomBehavior(player));
 		return coordinator;
 	}
+	public static BehaviorCoordinator competionCoordinator(PlayerBase player) {
+		BehaviorCoordinator coordinator = new BehaviorCoordinator();
+		coordinator.addBehavior(new CompetitionHungryBehavior(player));
+		coordinator.addBehavior(new CompetitionReproduceBehavior(player));
+		coordinator.addBehavior(new CompetionExploreBehavior(player));
+		coordinator.addBehavior(WaypointBehavior.squareWaypointBehavior(player));
+		coordinator.addBehavior(new RandomBehavior(player));
+		return coordinator;
+	}
 }

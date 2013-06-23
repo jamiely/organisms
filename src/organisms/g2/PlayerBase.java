@@ -54,7 +54,7 @@ public abstract class PlayerBase implements Player {
 		getMemory().rememberInfo(input);
 		
 		Move move = move(input);
-		getMemory().updateLocation(move);
+		getMemory().rememberMove(move);
 		if(move.type() == REPRODUCE) {
 			birth();
 		}
@@ -156,6 +156,10 @@ public abstract class PlayerBase implements Player {
 	
 	public Boolean nOutOfMTimes(int n, int m) {
 		return PlayerUtil.nOutOfMTimes(n, m, rand);
+	}
+	
+	public Integer nextRandomInt(int max) {
+		return rand.nextInt(max);
 	}
 		
 	public Double factorOfMaximumEnergyPerOrganism(Double factor) {
