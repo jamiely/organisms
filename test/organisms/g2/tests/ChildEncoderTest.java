@@ -16,7 +16,7 @@ public class ChildEncoderTest {
 		message.setBiomassRatio(0.01);
 		message.setPopulationRatio(0.20);
 		
-		Point lastFood = new Point(2, -2);
+		Point lastFood = new Point(-8, -8);
 		message.setLastSeenFood(lastFood);
 		
 		ChildEncoder encoder = new ChildEncoder();
@@ -25,6 +25,21 @@ public class ChildEncoderTest {
 		assertEquals("Decoded biomass is the same", 0.01, (double)decoded.getBiomassRatio(), 0.001);
 		assertEquals("Population ratio is the same", 0.20, (double)decoded.getPopulationRatio(), 0.001);
 		assertEquals("Last Seen food is the same", lastFood, decoded.getLastSeenFood());
+	}
+	
+	@Test
+	public void testEncoder2() {
+		ChildMessage message = new ChildMessage();
+		message.setBiomassRatio(0.01);
+		message.setPopulationRatio(0.20);
+		
+		Point lastFood = new Point(-8, -8);
+		message.setLastSeenFood(lastFood);
+		
+		ChildEncoder encoder = new ChildEncoder();
+		int state = encoder.encodeChildState(message);
+		
+		assertEquals("Decoded biomass is the same", 148, state);
 	}
 
 }

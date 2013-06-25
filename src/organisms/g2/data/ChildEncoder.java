@@ -12,8 +12,8 @@ public class ChildEncoder {
 		
 		if(Math.abs(message.getLastSeenFood().x) <= 8 &&
 				Math.abs(message.getLastSeenFood().y) <= 8) {
-			adjustedX = Math.abs(message.getLastSeenFood().x + 8);
-			adjustedY = Math.abs(message.getLastSeenFood().y + 8);
+			adjustedX = message.getLastSeenFood().x + 8;
+			adjustedY = message.getLastSeenFood().y + 8;
 		}
 		
 		return population + (biomass << 7) + (adjustedX << (7+4)) + (adjustedY << (7+4+4));   
@@ -21,6 +21,7 @@ public class ChildEncoder {
 	
 	public ChildMessage decodeChildState(int state) {
 		ChildMessage message = new ChildMessage();
+		
 		message.setPopulationRatio((state & 127) / 100.);
 		message.setBiomassRatio(((state >> 7) & 127) / 100.);
 		
