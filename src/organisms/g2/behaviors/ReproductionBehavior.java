@@ -3,7 +3,11 @@ package organisms.g2.behaviors;
 import organisms.Move;
 import organisms.g2.PlayerBase;
 import organisms.g2.PlayerUtil;
+import organisms.g2.data.ChildEncoder;
+import organisms.g2.data.ChildMessage;
 import organisms.g2.data.MoveInput;
+import organisms.g2.data.Point;
+import organisms.g2.data.PointUtil;
 import organisms.g2.signals.FoodIsInDirection;
 import organisms.g2.signals.SignalMapper;
 import organisms.g2.stats.Stats;
@@ -82,8 +86,16 @@ public class ReproductionBehavior extends BehaviorBase {
 		return new FoodIsInDirection(getFoodDirection());
 	}
 
-	protected int getMessageForChild(){
-		return SignalMapper.getInstance().getStateForSignal(getFoodDirectionSignal());
+	protected int getMessageForChild(int directionOfChild){
+		Point lastSeenFood = getMemory().getMostRecentlySeenFoodLocation();
+		Point foodRelativeToChild = PointUtil.pointOffsetInDirection(lastSeenFood, directionOfChild);
+		
+		ChildMessage message = new ChildMessage();
+		message.setBiomassRatio(getMemory().getBiomassRatio());
+		message.setPopulationRatio(getMemory().getPopulationRatio());
+		message.setLastSeenFood(foodRelativeToChild);
+		
+		return new ChildEncoder().encodeChildState(message);
 	}
 	
 	protected Move randomReproduce(MoveInput input) {
@@ -96,6 +108,6 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	
 	protected Move reproductionMove(int direction) {
-		return getMoveFactory().reproductionMove(direction, getMessageForChild());
+		return getMoveFactory().reproductionMove(direction, getMessageForChild(direction));
 	}
 }

@@ -31,7 +31,7 @@ public class BehaviorCoordinator implements MoveProvider {
 		for(BehaviorBase behavior: getBehaviors()) {
 			Move move = behavior.move(input);
 			if(move != null) {
-				System.out.println("Using move from behavior: " + behavior);
+				//System.out.println("Using move from behavior: " + behavior);
 				return move;
 			}
 		}

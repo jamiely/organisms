@@ -29,6 +29,11 @@ public class Memory implements Constants {
 	private Stack<Integer> moves;
 	
 	private Integer countOfConsecutiveStayPutMoves;
+	
+	
+	private Integer spacesSeen = 0;
+	private Integer foodSeen = 0;
+	private Integer neighborsSeen = 0;
 
 	public Memory(){
 		location = new Point(0, 0);
@@ -43,6 +48,7 @@ public class Memory implements Constants {
 		
 		
 		moves = new Stack<Integer>();
+		spacesSeen = 0;
 		setCountOfConsecutiveStayPutMoves(0);
 	}
 	
@@ -66,6 +72,7 @@ public class Memory implements Constants {
 			incrementCountOfConsecutiveStayPutMoves();
 		} else {
 			setCountOfConsecutiveStayPutMoves(0);
+			spacesSeen += 4;
 		}
 		updateLocation(move);
 	}
@@ -133,6 +140,8 @@ public class Memory implements Constants {
 	}
 	
 	public void addFood(int i){
+		foodSeen ++;
+		
 		Point foodLocation = PointUtil.pointOffsetInDirection(location, i);
 				
 		if (getFoodLocations().contains(foodLocation)){
@@ -169,6 +178,7 @@ public class Memory implements Constants {
 		for(int i = 1, size = neighbors.length; i < size; i++) {
 			if(neighbors[i] != -1){
 				addNeighbor(i);
+				neighborsSeen++;
 			}
 		}
 	}
@@ -240,5 +250,13 @@ public class Memory implements Constants {
 	
 	public void incrementCountOfConsecutiveStayPutMoves() {
 		setCountOfConsecutiveStayPutMoves(getCountOfConsecutiveStayPutMoves()+1);
+	}
+	
+	public Double getBiomassRatio() {
+		return (foodSeen + .0) / (spacesSeen + .0);
+	}
+	
+	public Double getPopulationRatio() {
+		return (neighborsSeen + .0) / (spacesSeen + .0);
 	}
 }
