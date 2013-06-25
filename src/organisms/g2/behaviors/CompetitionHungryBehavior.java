@@ -19,10 +19,12 @@ public class CompetitionHungryBehavior extends HungryBehavior {
 	public Move move(MoveInput input) {
 		if(input.getEnergyLeft() == getPlayer().getMaximumEnergyPerOrganismM()) return null;
 		
+		//if you are sitting on food, stay
 		if(input.getFoodLeft() > 0) {
 			return getMoveFactory().stayPutMove();
 		}
 		
+		//if there is food around, get it  
 		for(int i = 1, size = input.getFoodPresent().length; i < size; i ++) {
 			if(!input.isFoodPresentAt(i)) continue;
 			if(input.isNeighborAt(i)) continue;
@@ -64,7 +66,7 @@ public class CompetitionHungryBehavior extends HungryBehavior {
 		Integer energyBuffer = getPlayer().getEnergyConsumedByMovingOrReproducingV() * 3;
 		if(input.getEnergyLeft() < energyToGetThere + energyBuffer) return false;
 		
-		System.out.println(String.format("Last seen food is %d steps away", distance));
+//		System.out.println(String.format("Last seen food is %d steps away", distance));
 		
 		return true;
 	}

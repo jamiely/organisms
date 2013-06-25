@@ -17,6 +17,8 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	@Override
 	public Move move(MoveInput input) {
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
+		//reproducing would block parent in
+		if(PlayerUtil.numberOfEmptySpacesAround(input) < 2) return null;
 		if(!shouldReproduce(input)) return null;
 		
 		Move move = reproduceTowardsFood(input);
