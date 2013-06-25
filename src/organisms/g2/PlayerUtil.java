@@ -80,6 +80,15 @@ public class PlayerUtil implements Constants {
 		return false;
 	}
 	
+	public static int numberOfEmptySpacesAround(MoveInput input) {
+		int freeSpaceCount = 0; 
+		Integer[] neighbors = input.getNeighbors();
+		for(int i = 1, size = neighbors.length; i < size; i ++) {
+			if(input.noNeighborAt(i)) freeSpaceCount++;
+		}
+		return freeSpaceCount;
+	}
+	
 	public static Boolean noEmptyNeighboringSpaces(MoveInput input) {
 		return !atLeastOneEmptyNeighboringSpace(input);
 	}

@@ -18,6 +18,8 @@ public class ReproductionBehavior extends BehaviorBase {
 	@Override
 	public Move move(MoveInput input) {
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
+		//reproducing would block parent in
+		if(PlayerUtil.numberOfEmptySpacesAround(input) < 2) return null;
 		if(!shouldReproduce(input)) return null;
 		
 		return reproduceTowardsFood(input);
