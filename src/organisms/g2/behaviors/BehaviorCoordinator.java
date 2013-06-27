@@ -13,7 +13,10 @@ public class BehaviorCoordinator implements MoveProvider {
 		setBehaviors(new ArrayList<BehaviorBase>());
 	}
 	
-	public BehaviorBase addBehavior(BehaviorBase behavior) {
+	public BehaviorBase addBehavior(BehaviorBase behavior, int index) {
+		if(index <= getBehaviors().size()){
+			getBehaviors().add(index, behavior);
+		}
 		getBehaviors().add(behavior);
 		return behavior;
 	}
@@ -28,10 +31,10 @@ public class BehaviorCoordinator implements MoveProvider {
 
 	@Override
 	public Move move(MoveInput input) {
-		for(BehaviorBase behavior: getBehaviors()) {
-			Move move = behavior.move(input);
+		for(int i = 0, size = behaviors.size(); i < size; i ++) {
+			Move move = behaviors.get(i).move(input);
 			if(move != null) {
-				//System.out.println("Using move from behavior: " + behavior);
+//				System.out.println("Using move from behavior: " + behaviors.get(i));
 				return move;
 			}
 		}

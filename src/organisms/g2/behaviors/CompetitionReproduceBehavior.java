@@ -18,7 +18,7 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	public Move move(MoveInput input) {
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
 		//reproducing would block parent in
-		if(PlayerUtil.numberOfEmptySpacesAround(input) < 2) return null;
+		//if(PlayerUtil.numberOfEmptySpacesAround(input) < 2) return null;
 		if(!shouldReproduce(input)) return null;
 		
 		Move move = reproduceTowardsFood(input);
@@ -31,10 +31,10 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	}
 
 	protected boolean shouldReproduce(MoveInput input){
-		if (getPlayer().getAge() > 1 && 
-				getPlayer().nOutOfMTimes(1, 3)){
-			return false;
-		}
+//		if (getPlayer().getAge() > 1 && 
+//				getPlayer().nOutOfMTimes(1, 3)){
+//			return false;
+//		}
 		if(weHaveReproductionEnergyAndArentCrowded(input)){
 			return true;
 		}
@@ -54,8 +54,8 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	}
 	
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
-		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.5 &&
-				input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
+		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.8;// &&
+//				input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
 	}
 	
 	protected Move reproduceTowardsFood(MoveInput input) {
