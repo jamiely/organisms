@@ -17,6 +17,6 @@ public class Group2InterspeciesPlayer extends CoordinatedPlayerBase {
 		super.register(game, key);
 		setName("Group 2 Interspecies Player");
 		setColor(Color.YELLOW);
-		setCoordinator(CoordinatorFactory.competionSafeCoordinator(this));
+		setCoordinator(CoordinatorFactory.allCompetionCoordinator(this, .25));
 	}
 }

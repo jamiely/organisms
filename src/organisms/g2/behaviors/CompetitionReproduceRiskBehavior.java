@@ -5,25 +5,26 @@ import organisms.g2.PlayerBase;
 import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
 
-public class CompetitionReproduceBehavior extends ReproductionBehavior {
+public class CompetitionReproduceRiskBehavior extends ReproductionBehavior {
 	
 	private Integer preferredReproduceDirection;
 	private Double cutoff;
 	
-	public CompetitionReproduceBehavior(PlayerBase player, int preferredReproduceDirection) {
+	public CompetitionReproduceRiskBehavior(PlayerBase player, int preferredReproduceDirection) {
 		super(player);
 		setPreferredReproduceDirection(preferredReproduceDirection);
 	}
 	
-	public CompetitionReproduceBehavior(PlayerBase player, int preferredReproduceDirection, Double cutoff) {
+	public CompetitionReproduceRiskBehavior(PlayerBase player, int preferredReproduceDirection, double cutoff2) {
 		super(player);
 		setPreferredReproduceDirection(preferredReproduceDirection);
-		this.cutoff = cutoff;
+		cutoff = cutoff2;
 	}
 
 	@Override
 	public Move move(MoveInput input) {
-		if(getMemory().getBiomassRatio() > cutoff) return null;
+//		System.out.println("BioMass " + getMemory().getBiomassRatio());
+		if(getMemory().getBiomassRatio() < cutoff) return null;
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
 		if(!shouldReproduce(input)) return null;
 		
@@ -60,8 +61,8 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	}
 	
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
-		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.75  &&
-				nStepsHavePassedSinceWeLastHadChild(10);
+		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.5;//  &&
+				//nStepsHavePassedSinceWeLastHadChild(10);
 	}
 	
 	protected Move reproduceTowardsFood(MoveInput input) {

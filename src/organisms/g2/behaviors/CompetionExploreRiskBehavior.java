@@ -11,14 +11,22 @@ import organisms.g2.stats.Stats;
 public class CompetionExploreRiskBehavior extends ExploreBehavior {
 	
 	private Integer preferredExplorationDirection;
+	private Double cutoff;
 	
 	public CompetionExploreRiskBehavior(PlayerBase player, Integer preferredExplorationDirection) {
 		super(player);
 		setPreferredExplorationDirection(preferredExplorationDirection);
 	}
 
+	public CompetionExploreRiskBehavior(PlayerBase player, Integer preferredExplorationDirection, Double cutoff) {
+		super(player);
+		setPreferredExplorationDirection(preferredExplorationDirection);
+		this.cutoff = cutoff;
+	}
+
 	@Override
 	public Move move(MoveInput input) {
+		if(getMemory().getBiomassRatio() < cutoff) return null;
 		Integer foodDir = foodDirection(input);
 		if(foodDir != null) return new Move(foodDir);
 		

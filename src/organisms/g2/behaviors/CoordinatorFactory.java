@@ -59,4 +59,18 @@ public class CoordinatorFactory implements Constants {
 		return coordinator;
 	}	
 	
+	public static BehaviorCoordinator allCompetionCoordinator(PlayerBase player, double cutoff) {
+		BehaviorCoordinator coordinator = new BehaviorCoordinator();
+		int preferredDirection = PlayerUtil.getRandomCardinalDirection(player.getRand());
+		
+		coordinator.addBehavior(new CompetitionHungryBehavior(player),1);
+		coordinator.addBehavior(new CompetitionReproduceBehavior(player, preferredDirection, cutoff), 0);
+		coordinator.addBehavior(new CompetitionReproduceRiskBehavior(player, preferredDirection, cutoff), 1);
+		coordinator.addBehavior(new CompetionExploreSafeBehavior(player, cutoff),2);
+		coordinator.addBehavior(new CompetionExploreRiskBehavior(player, PlayerUtil.oppositeDirection(preferredDirection), cutoff),3);
+		//coordinator.addBehavior(WaypointBehavior.squareWaypointBehavior(player),3);
+		coordinator.addBehavior(new RandomBehavior(player),4);
+		return coordinator;
+	}	
+	
 }

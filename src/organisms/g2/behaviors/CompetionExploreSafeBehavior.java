@@ -8,13 +8,22 @@ import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
 
 public class CompetionExploreSafeBehavior extends ExploreBehavior {
+	
+	private Double cutoff;
 
 	public CompetionExploreSafeBehavior(PlayerBase player) {
 		super(player);
 	}
 	
+
+	public CompetionExploreSafeBehavior(PlayerBase player, double cutoff) {
+		super(player);
+		this.cutoff = cutoff;
+	}
+
 	@Override
 	public Move move(MoveInput input) {
+		if(getMemory().getBiomassRatio() > cutoff) return null;
 		Integer foodDir = foodDirection(input);
 		if(foodDir != null) return new Move(foodDir);
 		
@@ -25,18 +34,18 @@ public class CompetionExploreSafeBehavior extends ExploreBehavior {
 		if(itIsBetterToStayPut(input)) return getMoveFactory().stayPutMove();
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return getMoveFactory().stayPutMove();
 		
-		if(getPlayer().nOutOfMTimes(4, 5)) return getMoveFactory().stayPutMove();
-		if(getPlayer().nOutOfMTimes(1, 5)) return new Move(EAST);
+		if(getPlayer().nOutOfMTimes(9, 10)) return getMoveFactory().stayPutMove();
+		if(getPlayer().nOutOfMTimes(1, 10)) return new Move(randomDirectionOfEmptySpace(input));
 		
-		return new Move(NORTH);
+//		return new Move(NORTH);
 		
-//		int lastDirection = getMemory().getLastNonStayDirection();
-//		return new Move(PlayerUtil.getRandomCardinalDirectionExcept(
-//				getPlayer().getRand(), lastDirection));	
+		int lastDirection = getMemory().getLastNonStayDirection();
+		return new Move(PlayerUtil.getRandomCardinalDirectionExcept(
+				getPlayer().getRand(), lastDirection));	
 	}
 	
 	protected Integer foodDirection(MoveInput input) {
-		if(input.isFoodPresentAt(NORTH)) return NORTH;
+		if(input.isFoodPresentAt(STAYPUT)) return STAYPUT;
 		for(Integer dir: PlayerUtil.getCardinalDirections()) {
 			if(input.isFoodPresentAt(dir)) return dir;
 		}

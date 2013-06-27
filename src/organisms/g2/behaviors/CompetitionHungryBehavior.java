@@ -10,11 +10,12 @@ import organisms.g2.data.Point;
 import organisms.g2.data.PointUtil;
 
 public class CompetitionHungryBehavior extends HungryBehavior {
-
+	
 	public CompetitionHungryBehavior(PlayerBase player) {
 		super(player);
 	}
 	
+
 	@Override
 	public Move move(MoveInput input) {
 		if(input.getEnergyLeft() == getPlayer().getMaximumEnergyPerOrganismM()) return null;
@@ -54,7 +55,7 @@ public class CompetitionHungryBehavior extends HungryBehavior {
 	 * @return
 	 */
 	protected Boolean shouldSearchForFood(MoveInput input) {
-		return input.getEnergyLeft() < getPlayer().getMaximumEnergyPerOrganismM() * 0.4;
+		return input.getEnergyLeft() < getPlayer().getEnergyConsumedByMovingOrReproducingV() * 3;
 	}
 	
 	protected Boolean lastSeenFoodIsCloseEnough(MoveInput input) {
