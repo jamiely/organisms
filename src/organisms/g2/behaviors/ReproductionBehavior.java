@@ -110,6 +110,6 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	
 	protected Move reproductionMove(int direction) {
-		return getMoveFactory().reproductionMove(direction, getMessageForChild(direction));
+		return getMoveFactory().reproductionMove(direction, 0);
 	}
 }
