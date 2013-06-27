@@ -42,4 +42,20 @@ public class ChildEncoderTest {
 		assertEquals("Decoded biomass is the same", 148, state);
 	}
 	
+	@Test
+	public void testIsEncodedMessage(){
+		ChildMessage message = new ChildMessage();
+		message.setBiomassRatio(0.01);
+		message.setPopulationRatio(0.20);
+		
+		Point lastFood = new Point(-8, -8);
+		message.setLastSeenFood(lastFood);
+		
+		ChildEncoder encoder = new ChildEncoder();
+		int state = encoder.encodeChildState(message);
+		
+		assertTrue(encoder.isEncodedMessage(state));
+		assertFalse(encoder.isEncodedMessage(10));
+	}
+	
 }

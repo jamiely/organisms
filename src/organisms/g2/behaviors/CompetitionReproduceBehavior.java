@@ -25,7 +25,7 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 
 	@Override
 	public Move move(MoveInput input) {
-//		System.out.println("Brethren: " + getMemory().getOwnPopulationRatio() + " cutoff: " + brethrenCutoff);
+		System.out.println("Brethren: " + getMemory().getOwnPopulationRatio() + " cutoff: " + brethrenCutoff + "brethren: " + getMemory().getBrethrenSeen() + " neighbors: " + getMemory().getNeighborsSeen());
 		if(getMemory().getBiomassRatio() > cutoff) return null;
 		if(getMemory().getOwnPopulationRatio() > brethrenCutoff) return null;
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;

@@ -36,10 +36,20 @@ public class ChildEncoder {
 		return message;
 	}
 	
-	public boolean messageDecodes(int state){
+	public boolean isEncodedMessage(int state){
+		if (state == 0) return false;
+		double pop = (state & 127) / 100.;
+		double bio = ((state >> 7) & 127) / 100.;
 		int adjustedX = (state >> (7 + 7)) & 15;
 		int adjustedY = (state >> (7 + 7 + 4)) & 15;
 		
-		return((adjustedX >= 0 && adjustedX <= 16) && (adjustedY >= 0 && adjustedY <= 16));		
+		return((bio > 0 && bio < 100 && pop > 0 && bio < 100 && adjustedX >= 0 && adjustedX <= 16) && (adjustedY >= 0 && adjustedY <= 16));		
 	}
+	
+//	public boolean isEncodedMessage(int state){
+//		int adjustedX = (state >> (7 + 7)) & 15;
+//		int adjustedY = (state >> (7 + 7 + 4)) & 15;
+//		
+//		return (adjustedX > 0 && adjustedX < 16 && adjustedY > 0 && adjustedY < 16);
+//	}
 }

@@ -41,7 +41,7 @@ public class BehaviorCoordinator implements MoveProvider {
 		for(int i = 0, size = behaviors.size(); i < size; i ++) {
 			Move move = behaviors.get(i).move(input);
 			if(move != null) {
-//				System.out.println("Using move from behavior: " + behaviors.get(i));
+				System.out.println("Using move from behavior: " + behaviors.get(i));
 				return move;
 			}
 		}
