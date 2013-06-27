@@ -9,6 +9,8 @@ import java.util.Stack;
 
 import organisms.Move;
 import organisms.Constants;
+import organisms.g2.data.ChildEncoder;
+import organisms.g2.data.ChildMessage;
 import organisms.g2.data.MoveInput;
 import organisms.g2.data.Point;
 import organisms.g2.data.PointUtil;
@@ -34,7 +36,8 @@ public class Memory implements Constants {
 	private Integer spacesSeen = 0;
 	private Integer foodSeen = 0;
 	private Integer neighborsSeen = 0;
-
+	private Integer brethrenSeen = 0;
+	
 	public Memory(){
 		location = new Point(0, 0);
 		setFoodLocations(new ArrayList<Point> ());
@@ -176,6 +179,9 @@ public class Memory implements Constants {
 	
 	public void rememberNeighbors(Integer[] neighbors){
 		for(int i = 1, size = neighbors.length; i < size; i++) {
+			if(neighbors[i] == 157){
+				brethrenSeen++;
+			}
 			if(neighbors[i] != -1){
 				addNeighbor(i);
 				neighborsSeen++;
@@ -259,4 +265,20 @@ public class Memory implements Constants {
 	public Double getPopulationRatio() {
 		return (neighborsSeen + .0) / (spacesSeen + .0);
 	}
+
+	public Double getOwnPopulationRatio() {
+		return (brethrenSeen+ .0) / (neighborsSeen + .0);
+	}
+	
+	public void useParentMessage(int key) {
+		ChildEncoder encoder = new ChildEncoder();
+		ChildMessage decoded = encoder.decodeChildState(key);
+		double biomass = decoded.getBiomassRatio();
+		foodSeen=(int) (biomass*100);
+		spacesSeen = 100; 
+		double population = decoded.getPopulationRatio();
+		neighborsSeen = (int) (population*100);
+		foodLocations.add(decoded.getLastSeenFood());
+	}
+	
 }

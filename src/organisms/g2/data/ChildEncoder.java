@@ -35,4 +35,11 @@ public class ChildEncoder {
 		
 		return message;
 	}
+	
+	public boolean messageDecodes(int state){
+		int adjustedX = (state >> (7 + 7)) & 15;
+		int adjustedY = (state >> (7 + 7 + 4)) & 15;
+		
+		return((adjustedX >= 0 && adjustedX <= 16) && (adjustedY >= 0 && adjustedY <= 16));		
+	}
 }

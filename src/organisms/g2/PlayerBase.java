@@ -23,12 +23,13 @@ public abstract class PlayerBase implements Player {
 	
 	@Override
 	public void register(OrganismsGame __amoeba, int key) throws Exception {
-		setState(0);
+		setState(157);
 		setGame(__amoeba);
 		setColor(Color.GREEN);
 		setRand(new Random());
 		setMoveFactory(new MoveFactory(rand));
-		setMemory(new Memory());	
+		setMemory(new Memory());
+		memory.useParentMessage(key);
 	}
 
 	@Override

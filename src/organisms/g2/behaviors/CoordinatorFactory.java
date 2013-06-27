@@ -59,17 +59,19 @@ public class CoordinatorFactory implements Constants {
 		return coordinator;
 	}	
 	
-	public static BehaviorCoordinator allCompetionCoordinator(PlayerBase player, double cutoff) {
+	public static BehaviorCoordinator allCompetionCoordinator(PlayerBase player, double biomassCutoff, Double brethrenCutoff) {
 		BehaviorCoordinator coordinator = new BehaviorCoordinator();
 		int preferredDirection = PlayerUtil.getRandomCardinalDirection(player.getRand());
 		
-		coordinator.addBehavior(new CompetitionHungryBehavior(player),1);
-		coordinator.addBehavior(new CompetitionReproduceBehavior(player, preferredDirection, cutoff), 0);
-		coordinator.addBehavior(new CompetitionReproduceRiskBehavior(player, preferredDirection, cutoff), 1);
-		coordinator.addBehavior(new CompetionExploreSafeBehavior(player, cutoff),2);
-		coordinator.addBehavior(new CompetionExploreRiskBehavior(player, PlayerUtil.oppositeDirection(preferredDirection), cutoff),3);
-		//coordinator.addBehavior(WaypointBehavior.squareWaypointBehavior(player),3);
-		coordinator.addBehavior(new RandomBehavior(player),4);
+		coordinator.addBehavior(new CompetitionHungryBehavior(player, brethrenCutoff),1);
+		coordinator.addBehavior(new CompetitionReproduceBehavior(player, preferredDirection, biomassCutoff, brethrenCutoff), 0);
+		coordinator.addBehavior(new CompetitionReproduceRiskBehavior(player, preferredDirection, biomassCutoff, brethrenCutoff), 1);
+		coordinator.addBehavior(new CompetionExploreSafeBehavior(player, biomassCutoff, brethrenCutoff),2);
+		coordinator.addBehavior(new CompetionExploreRiskBehavior(player, PlayerUtil.oppositeDirection(preferredDirection), biomassCutoff, brethrenCutoff),3);
+		coordinator.addBehavior(new HungryBehavior(player, brethrenCutoff),5);
+		coordinator.addBehavior(new ReproductionBehavior(player, brethrenCutoff),4);
+		coordinator.addBehavior(new ExploreBehavior(player, brethrenCutoff),6);
+		coordinator.addBehavior(new RandomBehavior(player),7);
 		return coordinator;
 	}	
 	

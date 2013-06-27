@@ -10,20 +10,23 @@ import organisms.g2.data.MoveInput;
 public class CompetionExploreSafeBehavior extends ExploreBehavior {
 	
 	private Double cutoff;
+	private Double brethrenCutoff;
 
 	public CompetionExploreSafeBehavior(PlayerBase player) {
 		super(player);
 	}
 	
 
-	public CompetionExploreSafeBehavior(PlayerBase player, double cutoff) {
+	public CompetionExploreSafeBehavior(PlayerBase player, double cutoff, double brethrenCutoff) {
 		super(player);
 		this.cutoff = cutoff;
+		this.brethrenCutoff = brethrenCutoff;
 	}
 
 	@Override
 	public Move move(MoveInput input) {
-		if(getMemory().getBiomassRatio() > cutoff) return null;
+//		if(getMemory().getBiomassRatio() > cutoff) return null;
+		if(getMemory().getOwnPopulationRatio() > brethrenCutoff) return null;
 		Integer foodDir = foodDirection(input);
 		if(foodDir != null) return new Move(foodDir);
 		

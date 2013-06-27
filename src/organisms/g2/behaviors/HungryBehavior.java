@@ -10,11 +10,24 @@ import organisms.g2.data.Point;
 import organisms.g2.data.PointUtil;
 
 public class HungryBehavior extends BehaviorBase {
+	
+	private Double brethrenCutoff = 0.0;
+	
 	public HungryBehavior(PlayerBase player) {
 		super(player);
 	}
+	/**
+	 * @param player
+	 * @param brethrenCutoff
+	 */
+	public HungryBehavior(PlayerBase player, double BrethrenCutoff) {
+		super(player);
+		this.brethrenCutoff = BrethrenCutoff;
+	}
+	
 	@Override
 	public Move move(MoveInput input) {
+		if(getMemory().getOwnPopulationRatio() > brethrenCutoff) return null;
 		if(!iAmHungry(input)) return null;
 		
 		if(input.getFoodLeft() > 2) {

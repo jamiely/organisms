@@ -9,21 +9,25 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	
 	private Integer preferredReproduceDirection;
 	private Double cutoff;
+	private Double brethrenCutoff; 
 	
 	public CompetitionReproduceBehavior(PlayerBase player, int preferredReproduceDirection) {
 		super(player);
 		setPreferredReproduceDirection(preferredReproduceDirection);
 	}
 	
-	public CompetitionReproduceBehavior(PlayerBase player, int preferredReproduceDirection, Double cutoff) {
+	public CompetitionReproduceBehavior(PlayerBase player, int preferredReproduceDirection, Double cutoff, Double brethrenCutoff) {
 		super(player);
 		setPreferredReproduceDirection(preferredReproduceDirection);
 		this.cutoff = cutoff;
+		this.brethrenCutoff = brethrenCutoff;
 	}
 
 	@Override
 	public Move move(MoveInput input) {
+//		System.out.println("Brethren: " + getMemory().getOwnPopulationRatio() + " cutoff: " + brethrenCutoff);
 		if(getMemory().getBiomassRatio() > cutoff) return null;
+		if(getMemory().getOwnPopulationRatio() > brethrenCutoff) return null;
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
 		if(!shouldReproduce(input)) return null;
 		

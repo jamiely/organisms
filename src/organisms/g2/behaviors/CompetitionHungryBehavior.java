@@ -11,13 +11,26 @@ import organisms.g2.data.PointUtil;
 
 public class CompetitionHungryBehavior extends HungryBehavior {
 	
+	private Double brethrenCutoff;
+	
 	public CompetitionHungryBehavior(PlayerBase player) {
 		super(player);
 	}
 	
 
+	/**
+	 * @param player
+	 * @param brethrenCutoff
+	 */
+	public CompetitionHungryBehavior(PlayerBase player, Double brethrenCutoff) {
+		super(player);
+		this.brethrenCutoff = brethrenCutoff;
+	}
+
+
 	@Override
 	public Move move(MoveInput input) {
+		if(getMemory().getOwnPopulationRatio() > brethrenCutoff) return null;
 		if(input.getEnergyLeft() == getPlayer().getMaximumEnergyPerOrganismM()) return null;
 		
 		//if you are sitting on food, stay

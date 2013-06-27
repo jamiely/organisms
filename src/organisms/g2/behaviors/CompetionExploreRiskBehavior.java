@@ -12,21 +12,24 @@ public class CompetionExploreRiskBehavior extends ExploreBehavior {
 	
 	private Integer preferredExplorationDirection;
 	private Double cutoff;
+	private Double brethrenCutoff;
 	
 	public CompetionExploreRiskBehavior(PlayerBase player, Integer preferredExplorationDirection) {
 		super(player);
 		setPreferredExplorationDirection(preferredExplorationDirection);
 	}
 
-	public CompetionExploreRiskBehavior(PlayerBase player, Integer preferredExplorationDirection, Double cutoff) {
+	public CompetionExploreRiskBehavior(PlayerBase player, Integer preferredExplorationDirection, Double cutoff, Double brethrenCutoff) {
 		super(player);
 		setPreferredExplorationDirection(preferredExplorationDirection);
 		this.cutoff = cutoff;
+		this.brethrenCutoff = brethrenCutoff;
 	}
 
 	@Override
 	public Move move(MoveInput input) {
 		if(getMemory().getBiomassRatio() < cutoff) return null;
+		if(getMemory().getOwnPopulationRatio() > brethrenCutoff) return null;
 		Integer foodDir = foodDirection(input);
 		if(foodDir != null) return new Move(foodDir);
 		

@@ -14,13 +14,22 @@ import organisms.g2.stats.Stats;
 
 public class ReproductionBehavior extends BehaviorBase {
 	private double factorOfTotalEnergyToReproduce = .85;
+	private Double brethrenCutoff = 0.0;
 	//private int gestationPeriod = 10;
+	
 	
 	public ReproductionBehavior(PlayerBase player) {
 		super(player);
 	}
+	
+	public ReproductionBehavior(PlayerBase player, double BrethrenCutoff) {
+		super(player);
+		this.brethrenCutoff = BrethrenCutoff;
+	}
+	
 	@Override
 	public Move move(MoveInput input) {
+		if(getMemory().getOwnPopulationRatio() < brethrenCutoff) return null;
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return null;
 		//reproducing would block parent in
 		if(PlayerUtil.numberOfEmptySpacesAround(input) < 2) return null;
@@ -110,6 +119,14 @@ public class ReproductionBehavior extends BehaviorBase {
 	}
 	
 	protected Move reproductionMove(int direction) {
-		return getMoveFactory().reproductionMove(direction, 0);
+		ChildMessage message = new ChildMessage();
+		message.setBiomassRatio(getMemory().getBiomassRatio());
+		message.setPopulationRatio(getMemory().getPopulationRatio());
+		message.setLastSeenFood(getMemory().getMostRecentlySeenFoodLocation());
+		
+		ChildEncoder encoder = new ChildEncoder();
+		int encodedMessage = encoder.encodeChildState(message);
+		
+		return getMoveFactory().reproductionMove(direction, encodedMessage);
 	}
 }

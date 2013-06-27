@@ -41,5 +41,5 @@ public class ChildEncoderTest {
 		
 		assertEquals("Decoded biomass is the same", 148, state);
 	}
-
+	
 }

@@ -6,11 +6,22 @@ import organisms.g2.PlayerUtil;
 import organisms.g2.data.MoveInput;
 
 public class ExploreBehavior extends BehaviorBase {
+	
+	private Double brethrenCutoff = 0.0;
+	
 	public ExploreBehavior(PlayerBase player) {
 		super(player);
 	}
+
+	public ExploreBehavior(PlayerBase player, Double brethrenCutoff) {
+		super(player);
+		this.brethrenCutoff = brethrenCutoff;
+	}
+	
+	
 	@Override
 	public Move move(MoveInput input) {
+		if(getMemory().getOwnPopulationRatio() < brethrenCutoff) return null;
 		if(iDontKnowWhatToDo()) return null;
 		if(itIsBetterToStayPut()) return getMoveFactory().stayPutMove();
 		if(PlayerUtil.noEmptyNeighboringSpaces(input)) return getMoveFactory().stayPutMove();

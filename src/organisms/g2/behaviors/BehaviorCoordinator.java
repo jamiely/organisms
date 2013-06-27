@@ -3,7 +3,9 @@ package organisms.g2.behaviors;
 import java.util.ArrayList;
 
 import organisms.Move;
+import organisms.Player;
 import organisms.g2.MoveProvider;
+import organisms.g2.PlayerBase;
 import organisms.g2.data.MoveInput;
 
 public class BehaviorCoordinator implements MoveProvider {
