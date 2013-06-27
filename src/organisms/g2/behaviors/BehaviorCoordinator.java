@@ -13,6 +13,11 @@ public class BehaviorCoordinator implements MoveProvider {
 		setBehaviors(new ArrayList<BehaviorBase>());
 	}
 	
+	public BehaviorBase addBehavior(BehaviorBase behavior) {
+		getBehaviors().add(behavior);
+		return behavior;
+	}
+	
 	public BehaviorBase addBehavior(BehaviorBase behavior, int index) {
 		if(index <= getBehaviors().size()){
 			getBehaviors().add(index, behavior);

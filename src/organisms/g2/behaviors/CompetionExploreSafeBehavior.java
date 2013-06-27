@@ -49,7 +49,7 @@ public class CompetionExploreSafeBehavior extends ExploreBehavior {
 	}
 	
 	protected Boolean weHaveStayedTooMuch() {
-		return getMemory().getCountOfConsecutiveStayPutMoves() > 5;
+		return getMemory().getCountOfConsecutiveStayPutMoves() > 15;
 	}
 	
 	protected Boolean itIsBetterToStayPut(MoveInput input) {

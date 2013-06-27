@@ -54,7 +54,7 @@ public class CompetitionReproduceBehavior extends ReproductionBehavior {
 	}
 	
 	protected boolean weHaveEnoughEnergyToReproduce(MoveInput input) {
-		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.8;// &&
+		return input.getEnergyLeft() > getPlayer().getMaximumEnergyPerOrganismM() * 0.75;// &&
 //				input.getEnergyLeft() > getPlayer().getEnergyConsumedByMovingOrReproducingV() * 2;
 	}
 	
